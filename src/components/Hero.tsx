@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { MessageCircle, ArrowRight } from "lucide-react";
 
-const WA_NUMBER = "2229051344";
+const WA_NUMBER = "7411108466";
 const WA_MESSAGE = encodeURIComponent(
   "¡Hola! Me gustaría agendar una consulta en Orfit.",
 );
@@ -130,8 +130,8 @@ export default function Hero() {
             }}
           >
             Precisión médica con visión artística. Ofrecemos resultados
-            naturales y duraderos adaptados a tus rasgos únicos — porque
-            el mejor trabajo estético jamás se nota.
+            naturales y duraderos adaptados a tus rasgos únicos — porque el
+            mejor trabajo estético jamás se nota.
           </p>
 
           <div

@@ -50,7 +50,8 @@ export default function Footer() {
                 maxWidth: 260,
               }}
             >
-              Clínica de medicina estética dedicada a resultados naturales y duraderos.
+              Clínica de medicina estética dedicada a resultados naturales y
+              duraderos.
             </p>
           </div>
 
@@ -160,7 +161,7 @@ export default function Footer() {
               hola@orfit.mx
             </a>
             <a
-              href="tel:+522229051344"
+              href="tel:+527411108466"
               style={{
                 color: "rgba(250,250,247,0.45)",
                 fontSize: "0.8125rem",

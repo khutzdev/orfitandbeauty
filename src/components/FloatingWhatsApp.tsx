@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X } from "lucide-react";
 
-const WA_NUMBER = "2229051344";
+const WA_NUMBER = "7411108466";
 const WA_MESSAGE = encodeURIComponent(
   "¡Hola! Me gustaría agendar una consulta en Orfit.",
 );
@@ -58,7 +58,13 @@ export default function FloatingWhatsApp() {
             >
               <X size={14} />
             </button>
-            <p style={{ fontWeight: 600, marginBottom: "0.25rem", paddingRight: "1rem" }}>
+            <p
+              style={{
+                fontWeight: 600,
+                marginBottom: "0.25rem",
+                paddingRight: "1rem",
+              }}
+            >
               Chátea con nosotros
             </p>
             <p style={{ color: "rgba(250,250,247,0.65)", fontSize: "0.8rem" }}>
@@ -101,8 +107,12 @@ export default function FloatingWhatsApp() {
             cursor: "pointer",
             textDecoration: "none",
           }}
-          onFocus={(e) => ((e.currentTarget as HTMLElement).style.transform = "scale(1.1)")}
-          onBlur={(e) => ((e.currentTarget as HTMLElement).style.transform = "scale(1)")}
+          onFocus={(e) =>
+            ((e.currentTarget as HTMLElement).style.transform = "scale(1.1)")
+          }
+          onBlur={(e) =>
+            ((e.currentTarget as HTMLElement).style.transform = "scale(1)")
+          }
           aria-label="Chatear por WhatsApp"
         >
           <MessageCircle size={26} color="#fff" fill="#fff" />
