@@ -13,39 +13,10 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 50,
-        background: "rgba(250, 250, 247, 0.97)",
-        backdropFilter: "blur(14px)",
-        borderBottom: "1px solid #E8E0D8",
-      }}
-    >
-      <nav
-        style={{
-          maxWidth: 1280,
-          margin: "0 auto",
-          padding: "0 0rem",
-          height: 72,
-          display: "flex",
-          alignItems: "center",
-          gap: "2.5rem",
-        }}
-      >
+    <header className="fixed top-0 inset-x-0 z-50 border-b border-b-[#E8E0D8] backdrop-blur-lg bg-[#FAFAF6]">
+      <nav className="h-20 flex items-center justify-between gap-10 px-12">
         {/* Logo — left */}
-        <a
-          href="#"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            textDecoration: "none",
-            flexShrink: 0,
-          }}
-        >
+        <a className="flex items-center no-underline shrink-0" href="#">
           <Logo style={{ height: 52, width: "auto" }} />
         </a>
 
@@ -80,7 +51,7 @@ export default function Navbar() {
         </div>
 
         {/* Spacer */}
-        <div style={{ flex: 1 }} />
+        {/*<div style={{ flex: 1 }} />*/}
 
         {/* Reservar — far right */}
         <a
@@ -180,7 +151,7 @@ export default function Navbar() {
         </div>
       )}
 
-      <style>{`
+      {/*<style>{`
         @media (max-width: 768px) {
           .desktop-nav { display: none !important; }
           .mobile-menu-btn { display: flex !important; }
@@ -188,7 +159,7 @@ export default function Navbar() {
         @media (min-width: 769px) {
           .mobile-menu-btn { display: none !important; }
         }
-      `}</style>
+      `}</style>*/}
     </header>
   );
 }

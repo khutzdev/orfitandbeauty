@@ -9,15 +9,8 @@ const WA_MESSAGE = encodeURIComponent(
 export default function Hero() {
   return (
     <section
+      className="relative flex items-center min-h-screen bg-[FAFAF7] overflow-hidden"
       id="hero"
-      style={{
-        position: "relative",
-        minHeight: "100vh",
-        background: "#FAFAF7",
-        overflow: "hidden",
-        display: "flex",
-        alignItems: "center",
-      }}
     >
       {/* Right-half full-bleed image — absolutely positioned so it never
           affects the content container's horizontal alignment */}
@@ -25,72 +18,40 @@ export default function Hero() {
         initial={{ opacity: 0, scale: 1.04 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1.2, ease: "easeOut" }}
-        style={{
-          position: "absolute",
-          top: 0,
-          right: 0,
-          bottom: 0,
-          width: "50%",
-          overflow: "hidden",
-        }}
-        className="hero-image-panel"
+        className="hero-image-panel absolute top-0 right-0 bottom-0 w-1/2 overflow-hidden"
       >
         <img
           src="https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=900&q=85"
           alt="Aesthetic medicine"
+          className="w-full h-full object-cover block"
           style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
             objectPosition: "center top",
-            display: "block",
           }}
         />
         {/* Soft left-edge blend into the ivory background */}
         <div
+          className="absolute inset-0 pointer-none"
           style={{
-            position: "absolute",
-            inset: 0,
             background:
               "linear-gradient(to right, rgba(250,250,247,0.4) 0%, transparent 18%)",
-            pointerEvents: "none",
           }}
         />
       </motion.div>
 
       {/* Content container — identical to every other section */}
-      <div
-        style={{
-          position: "relative",
-          maxWidth: 1280,
-          margin: "0 auto",
-          width: "100%",
-          paddingTop: "7.5rem",
-          paddingBottom: "5rem",
-          paddingLeft: "2rem",
-          paddingRight: "2rem",
-        }}
-      >
+      <div className="relative mx-auto w-full pt-28 pb-12 px-12">
         {/* Text lives in the left ~half so it stays clear of the image */}
         <motion.div
           initial={{ opacity: 0, y: 32 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, ease: "easeOut" }}
-          style={{ maxWidth: 520 }}
-          className="hero-text"
+          className="max-w-130 hero-text"
         >
           <span
+            className="inline-block bg-[#FFF024] text-[#1A1A18] text-[0.68rem] font-bold uppercase rounded-sm mb-8"
             style={{
-              display: "inline-block",
-              background: "#FFF024",
-              color: "#1A1A18",
-              fontSize: "0.68rem",
-              fontWeight: 700,
               letterSpacing: "0.2em",
-              textTransform: "uppercase",
               padding: "0.28rem 0.75rem",
-              borderRadius: "4px",
-              marginBottom: "2rem",
             }}
           >
             Medicina Estética
