@@ -11,13 +11,13 @@ const links = [
 export default function Footer() {
   return (
     <footer
+      className="pt-16 pb-10 px-12"
       style={{
         background: "#1A1A18",
         borderTop: "1px solid rgba(255,255,255,0.06)",
-        padding: "4rem 2rem 2.5rem",
       }}
     >
-      <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+      <div className="mx-auto">
         <div
           style={{
             display: "grid",
@@ -100,12 +100,21 @@ export default function Footer() {
               }}
             >
               {[
-                { icon: <Instagram size={16} />, label: "Instagram" },
-                { icon: <Facebook size={16} />, label: "Facebook" },
+                {
+                  icon: <Instagram size={16} />,
+                  label: "Instagram",
+                  href: "https://www.instagram.com/or_fit_beauty?igsh=MTE2ZHpzZnBvamti",
+                },
+                {
+                  icon: <Facebook size={16} />,
+                  label: "Facebook",
+                  href: "https://www.facebook.com/share/1Af98dbVVH/?mibextid=wwXIfr",
+                },
               ].map((s) => (
                 <a
                   key={s.label}
-                  href="#"
+                  href={s.href}
+                  target="_blank"
                   style={{
                     width: 38,
                     height: 38,
@@ -158,7 +167,7 @@ export default function Footer() {
                   "rgba(250,250,247,0.45)")
               }
             >
-              kricodelao@gmail.com
+              hola@orfit.com
             </a>
             <a
               href="tel:+527411108466"
