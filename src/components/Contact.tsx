@@ -150,8 +150,8 @@ export default function Contact() {
                 {
                   icon: <Mail size={16} style={{ color: "#1A1A18" }} />,
                   label: "Correo",
-                  content: "hola@orfit.mx",
-                  href: "mailto:hola@orfit.mx",
+                  content: "kricodelao@gmail.com",
+                  href: "mailto:kricodelao@gmail.com",
                 },
               ].map((item) => (
                 <div

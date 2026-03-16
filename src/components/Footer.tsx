@@ -141,7 +141,7 @@ export default function Footer() {
               ))}
             </div>
             <a
-              href="mailto:hola@orfit.mx"
+              href="mailto:kricodelao@gmail.com"
               style={{
                 color: "rgba(250,250,247,0.45)",
                 fontSize: "0.8125rem",
@@ -158,7 +158,7 @@ export default function Footer() {
                   "rgba(250,250,247,0.45)")
               }
             >
-              hola@orfit.mx
+              kricodelao@gmail.com
             </a>
             <a
               href="tel:+527411108466"
