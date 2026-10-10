@@ -1,26 +1,94 @@
 @import "tailwindcss";
 
-@layer base {
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
+@theme {
+  --font-serif: "Fraunces", Georgia, serif;
+  --font-sans: "Manrope", system-ui, sans-serif;
 
+  /* Palette drawn from the Orfit logo, softened for an editorial feel */
+  --color-cream: #f6f1ea;
+  --color-sand: #ede4d8;
+  --color-stone: #d9cdbd;
+  --color-ink: #1d1b18;
+  --color-muted: #6e675e;
+  --color-blush: #f4dcd3;
+  --color-rose: #c26f62;
+  --color-rose-deep: #a85a4e;
+  --color-mint: #cfe9df;
+  --color-forest: #1f3a32;
+  --color-forest-deep: #172b25;
+
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-marquee: marquee 40s linear infinite;
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+}
+
+@layer base {
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
   }
 
   body {
-    background-color: #FAFAF7;
-    color: #1A1A18;
-    font-family: "Inter", system-ui, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    @apply bg-cream text-ink font-sans antialiased;
+  }
+
+  ::selection {
+    @apply bg-blush text-ink;
   }
 
   #root {
     width: 100%;
     min-height: 100vh;
+  }
+}
+
+@utility container-x {
+  @apply mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-12;
+}
+
+@utility eyebrow {
+  @apply inline-flex items-center gap-3 text-[0.7rem] font-semibold uppercase tracking-[0.28em] text-rose-deep;
+
+  &::before {
+    content: "";
+    @apply h-px w-8 bg-current;
+  }
+}
+
+@utility heading {
+  @apply font-serif font-light text-4xl leading-[1.05] tracking-[-0.02em] sm:text-5xl lg:text-6xl;
+}
+
+@utility btn {
+  @apply inline-flex items-center justify-center gap-3 whitespace-nowrap rounded-full px-7 py-4 text-[0.78rem] font-semibold uppercase tracking-[0.16em] transition-all duration-500 ease-soft;
+}
+
+@utility btn-dark {
+  @apply btn bg-ink text-cream hover:bg-rose-deep;
+}
+
+@utility btn-outline {
+  @apply btn border border-ink/20 text-ink hover:border-ink hover:bg-ink hover:text-cream;
+}
+
+@utility field {
+  @apply w-full border-0 border-b border-stone bg-transparent px-0 py-3 text-[0.95rem] text-ink placeholder:text-muted/60 outline-none transition-colors focus:border-ink;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .animate-marquee {
+    animation: none;
   }
 }

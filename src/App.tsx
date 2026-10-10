@@ -16,8 +16,8 @@ function App() {
       <Navbar />
       <main>
         <Hero />
-        <Procedures />
         <Brands />
+        <Procedures />
         <About />
         <Products />
         <WhyUs />

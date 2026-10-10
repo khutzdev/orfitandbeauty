@@ -1,325 +1,121 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Clock, Sparkles, X } from "lucide-react";
+import { ArrowUpRight, Clock, Sparkles, X } from "lucide-react";
 import { procedures, type Procedure } from "../data/procedures";
+import Reveal from "./Reveal";
+
+const ease = [0.22, 1, 0.36, 1] as const;
 
 function ProcedureCard({
   procedure,
+  index,
   onClick,
 }: {
   procedure: Procedure;
+  index: number;
   onClick: () => void;
 }) {
-  const [hovered, setHovered] = useState(false);
-
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      style={{
-        cursor: "pointer",
-        background: "#FAFAF7",
-        border: "1.5px solid",
-        borderColor: hovered ? "#000" : "#E8E0D8",
-        borderRadius: "16px",
-        overflow: "hidden",
-        transition: "border-color 0.25s, box-shadow 0.25s, transform 0.25s",
-        boxShadow: hovered
-          ? "0 12px 40px rgba(0,0,0,0.18)"
-          : "0 1px 4px rgba(26,26,24,0.05)",
-        transform: hovered ? "translateY(-4px)" : "translateY(0)",
-      }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onClick={onClick}
-    >
-      <div style={{ overflow: "hidden", height: 220 }}>
-        <img
-          src={procedure.image}
-          alt={procedure.name}
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            transition: "transform 0.5s ease",
-            transform: hovered ? "scale(1.06)" : "scale(1)",
-          }}
-        />
-      </div>
-      <div style={{ padding: "1.5rem" }}>
-        <span
-          style={{
-            display: "inline-block",
-            background: "#FFF024",
-            color: "#1A1A18",
-            fontSize: "0.65rem",
-            fontWeight: 700,
-            letterSpacing: "0.15em",
-            textTransform: "uppercase",
-            padding: "0.2rem 0.6rem",
-            borderRadius: "4px",
-            marginBottom: "0.625rem",
-          }}
-        >
-          {procedure.tagline}
-        </span>
-        <h3
-          style={{
-            fontFamily: '"Playfair Display", Georgia, serif',
-            fontSize: "1.375rem",
-            fontWeight: 500,
-            color: "#1A1A18",
-            marginBottom: "0.75rem",
-            lineHeight: 1.3,
-          }}
-        >
-          {procedure.name}
-        </h3>
-        <p
-          style={{
-            color: "#6B6B64",
-            fontSize: "0.875rem",
-            lineHeight: 1.7,
-            marginBottom: "1.25rem",
-            display: "-webkit-box",
-            WebkitLineClamp: 3,
-            WebkitBoxOrient: "vertical",
-            overflow: "hidden",
-          }}
-        >
-          {procedure.description}
-        </p>
-        <div
-          style={{
-            display: "flex",
-            gap: "1.25rem",
-            borderTop: "1px solid #E8E0D8",
-            paddingTop: "1rem",
-          }}
-        >
-          <div
-            style={{ display: "flex", alignItems: "center", gap: "0.375rem" }}
-          >
-            <Clock size={13} style={{ color: "#1A1A18" }} />
-            <span style={{ fontSize: "0.8rem", color: "#6B6B64" }}>
-              {procedure.duration}
-            </span>
-          </div>
-          <div
-            style={{ display: "flex", alignItems: "center", gap: "0.375rem" }}
-          >
-            <Sparkles size={13} style={{ color: "#1A1A18" }} />
-            <span style={{ fontSize: "0.8rem", color: "#6B6B64" }}>
-              {procedure.recovery}
-            </span>
-          </div>
+    <Reveal delay={(index % 4) * 0.08}>
+      <button onClick={onClick} className="group block w-full text-left">
+        <div className="relative aspect-[4/3] overflow-hidden rounded-[1.75rem] bg-sand sm:aspect-[3/4]">
+          <img
+            src={procedure.image}
+            alt={procedure.name}
+            loading="lazy"
+            className="size-full object-cover transition-transform duration-[1.2s] ease-soft group-hover:scale-105"
+          />
+          <span className="absolute left-5 top-5 rounded-full bg-cream/90 px-3 py-1 text-[0.68rem] font-semibold tracking-[0.12em] text-ink backdrop-blur">
+            {String(index + 1).padStart(2, "0")}
+          </span>
+          <span className="absolute right-5 top-5 grid size-10 translate-y-2 place-items-center rounded-full bg-cream text-ink opacity-0 transition-all duration-500 ease-soft group-hover:translate-y-0 group-hover:opacity-100">
+            <ArrowUpRight size={16} strokeWidth={1.75} />
+          </span>
         </div>
-      </div>
-    </motion.div>
+        <h3 className="mt-5 font-serif text-2xl font-light tracking-tight">{procedure.name}</h3>
+        <p className="mt-1.5 text-sm text-muted">{procedure.tagline}</p>
+        <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-[0.72rem] uppercase tracking-[0.12em] text-ink/60">
+          <span className="flex items-center gap-1.5">
+            <Clock size={12} strokeWidth={1.75} />
+            {procedure.duration}
+          </span>
+          <span className="flex items-center gap-1.5">
+            <Sparkles size={12} strokeWidth={1.75} />
+            {procedure.recovery}
+          </span>
+        </div>
+      </button>
+    </Reveal>
   );
 }
 
-function Modal({
-  procedure,
-  onClose,
-}: {
-  procedure: Procedure;
-  onClose: () => void;
-}) {
+function Drawer({ procedure, onClose }: { procedure: Procedure; onClose: () => void }) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    document.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [onClose]);
+
   return (
-    <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        style={{
-          position: "fixed",
-          inset: 0,
-          background: "rgba(26,26,24,0.75)",
-          zIndex: 100,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: "1.5rem",
-        }}
-        onClick={onClose}
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.4 }}
+      onClick={onClose}
+      className="fixed inset-0 z-[60] flex justify-end bg-ink/40 backdrop-blur-sm"
+    >
+      <motion.aside
+        role="dialog"
+        aria-modal="true"
+        aria-label={procedure.name}
+        initial={{ x: "100%" }}
+        animate={{ x: 0 }}
+        exit={{ x: "100%" }}
+        transition={{ duration: 0.6, ease }}
+        onClick={(e) => e.stopPropagation()}
+        className="flex h-full w-full max-w-xl flex-col overflow-y-auto bg-cream"
       >
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          transition={{ duration: 0.3 }}
-          style={{
-            background: "#FAFAF7",
-            maxWidth: 640,
-            width: "100%",
-            maxHeight: "90vh",
-            overflowY: "auto",
-            borderRadius: "20px",
-            overflow: "hidden",
-          }}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div style={{ position: "relative" }}>
-            <img
-              src={procedure.image}
-              alt={procedure.name}
-              style={{
-                width: "100%",
-                height: 280,
-                objectFit: "cover",
-                display: "block",
-              }}
-            />
-            <button
-              onClick={onClose}
-              style={{
-                position: "absolute",
-                top: "1rem",
-                right: "1rem",
-                background: "#1A1A18",
-                border: "none",
-                color: "#FAFAF7",
-                width: 36,
-                height: 36,
-                borderRadius: "50%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-              }}
-            >
-              <X size={16} />
-            </button>
-          </div>
-          <div style={{ padding: "2rem" }}>
-            <span
-              style={{
-                display: "inline-block",
-                background: "#FFF024",
-                color: "#1A1A18",
-                fontSize: "0.7rem",
-                fontWeight: 700,
-                letterSpacing: "0.15em",
-                textTransform: "uppercase",
-                padding: "0.25rem 0.7rem",
-                borderRadius: "4px",
-                marginBottom: "0.75rem",
-              }}
-            >
-              {procedure.tagline}
-            </span>
-            <h3
-              style={{
-                fontFamily: '"Playfair Display", Georgia, serif',
-                fontSize: "2rem",
-                fontWeight: 500,
-                color: "#1A1A18",
-                marginBottom: "1.25rem",
-                lineHeight: 1.2,
-              }}
-            >
-              {procedure.name}
-            </h3>
-            <p
-              style={{
-                color: "#3A3A36",
-                lineHeight: 1.8,
-                marginBottom: "2rem",
-                fontSize: "0.9375rem",
-              }}
-            >
-              {procedure.description}
-            </p>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: "1rem",
-                borderTop: "1px solid #E8E0D8",
-                paddingTop: "1.5rem",
-                marginBottom: "2rem",
-              }}
-            >
-              <div
-                style={{
-                  background: "#F4F0EC",
-                  padding: "1rem",
-                  borderRadius: "10px",
-                }}
-              >
-                <p
-                  style={{
-                    fontSize: "0.72rem",
-                    fontWeight: 700,
-                    color: "#6B6B64",
-                    letterSpacing: "0.12em",
-                    textTransform: "uppercase",
-                    marginBottom: "0.25rem",
-                  }}
-                >
-                  Duración
-                </p>
-                <p style={{ fontWeight: 600, color: "#1A1A18" }}>
-                  {procedure.duration}
-                </p>
-              </div>
-              <div
-                style={{
-                  background: "#F4F0EC",
-                  padding: "1rem",
-                  borderRadius: "10px",
-                }}
-              >
-                <p
-                  style={{
-                    fontSize: "0.72rem",
-                    fontWeight: 700,
-                    color: "#6B6B64",
-                    letterSpacing: "0.12em",
-                    textTransform: "uppercase",
-                    marginBottom: "0.25rem",
-                  }}
-                >
-                  Recuperación
-                </p>
-                <p style={{ fontWeight: 600, color: "#1A1A18" }}>
-                  {procedure.recovery}
-                </p>
-              </div>
+        <div className="relative aspect-[4/3] shrink-0 overflow-hidden">
+          <img src={procedure.image} alt={procedure.name} className="size-full object-cover" />
+          <button
+            onClick={onClose}
+            aria-label="Cerrar"
+            className="absolute right-5 top-5 grid size-11 place-items-center rounded-full bg-cream text-ink transition-transform duration-300 hover:rotate-90"
+          >
+            <X size={18} strokeWidth={1.5} />
+          </button>
+        </div>
+
+        <div className="flex flex-1 flex-col p-8 sm:p-12">
+          <span className="eyebrow">{procedure.tagline}</span>
+          <h3 className="mt-5 font-serif text-4xl font-light tracking-tight sm:text-5xl">
+            {procedure.name}
+          </h3>
+          <p className="mt-6 leading-relaxed text-muted">{procedure.description}</p>
+
+          <dl className="mt-10 grid grid-cols-2 border-y border-ink/10">
+            <div className="py-6 pr-6">
+              <dt className="text-[0.68rem] uppercase tracking-[0.18em] text-muted">Duración</dt>
+              <dd className="mt-2 font-serif text-xl font-light sm:text-2xl">{procedure.duration}</dd>
             </div>
-            <a
-              href="#contact"
-              onClick={onClose}
-              style={{
-                display: "block",
-                background: "#FFF024",
-                color: "#1A1A18",
-                textDecoration: "none",
-                padding: "0.9rem",
-                textAlign: "center",
-                fontSize: "0.875rem",
-                fontWeight: 700,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                borderRadius: "10px",
-                transition: "background 0.2s",
-              }}
-              onMouseEnter={(e) =>
-                ((e.currentTarget as HTMLElement).style.background = "#e6d800")
-              }
-              onMouseLeave={(e) =>
-                ((e.currentTarget as HTMLElement).style.background = "#FFF024")
-              }
-            >
-              Agendar una Consulta
-            </a>
-          </div>
-        </motion.div>
-      </motion.div>
-    </AnimatePresence>
+            <div className="border-l border-ink/10 py-6 pl-6">
+              <dt className="text-[0.68rem] uppercase tracking-[0.18em] text-muted">Recuperación</dt>
+              <dd className="mt-2 font-serif text-xl font-light sm:text-2xl">{procedure.recovery}</dd>
+            </div>
+          </dl>
+
+          <a href="#contact" onClick={onClose} className="btn-dark mt-10 w-full">
+            Agendar una consulta
+            <ArrowUpRight size={15} strokeWidth={1.75} />
+          </a>
+        </div>
+      </motion.aside>
+    </motion.div>
   );
 }
 
@@ -327,75 +123,33 @@ export default function Procedures() {
   const [selected, setSelected] = useState<Procedure | null>(null);
 
   return (
-    <section
-      id="procedures"
-      style={{
-        background: "#F4F0EC",
-        padding: "7rem 2rem",
-      }}
-    >
-      <div style={{ maxWidth: 1280, margin: "0 auto" }}>
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          style={{ textAlign: "center", marginBottom: "4rem" }}
-        >
-          <span
-            style={{
-              display: "inline-block",
-              background: "#FFF024",
-              color: "#1A1A18",
-              fontSize: "0.72rem",
-              fontWeight: 700,
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              padding: "0.3rem 0.8rem",
-              borderRadius: "4px",
-              marginBottom: "1.25rem",
-            }}
-          >
-            Nuestros Tratamientos
-          </span>
-          <h2
-            style={{
-              fontFamily: '"Playfair Display", Georgia, serif',
-              fontSize: "clamp(2rem, 3.5vw, 2.875rem)",
-              fontWeight: 500,
-              color: "#1A1A18",
-              letterSpacing: "-0.02em",
-              lineHeight: 1.2,
-              maxWidth: 560,
-              margin: "0 auto",
-            }}
-          >
-            Tratamientos diseñados para ti
-          </h2>
-        </motion.div>
+    <section id="procedures" className="py-24 lg:py-36">
+      <div className="container-x">
+        <div className="mb-14 grid gap-8 lg:mb-20 lg:grid-cols-12 lg:items-end">
+          <Reveal className="lg:col-span-7">
+            <span className="eyebrow">Nuestros tratamientos</span>
+            <h2 className="heading mt-6">
+              Tratamientos diseñados <em className="italic text-rose-deep">para ti</em>
+            </h2>
+          </Reveal>
+          <Reveal delay={0.1} className="lg:col-span-4 lg:col-start-9">
+            <p className="leading-relaxed text-muted">
+              Cada procedimiento se adapta a tu anatomía y objetivos. Toca un
+              tratamiento para conocer los detalles, tiempos y recuperación.
+            </p>
+          </Reveal>
+        </div>
 
-        {/* Grid */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
-            gap: "1.5rem",
-          }}
-        >
-          {procedures.map((p) => (
-            <ProcedureCard
-              key={p.id}
-              procedure={p}
-              onClick={() => setSelected(p)}
-            />
+        <div className="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+          {procedures.map((p, i) => (
+            <ProcedureCard key={p.id} procedure={p} index={i} onClick={() => setSelected(p)} />
           ))}
         </div>
       </div>
 
-      {selected && (
-        <Modal procedure={selected} onClose={() => setSelected(null)} />
-      )}
+      <AnimatePresence>
+        {selected && <Drawer procedure={selected} onClose={() => setSelected(null)} />}
+      </AnimatePresence>
     </section>
   );
 }

@@ -1,5 +1,4 @@
-import { motion } from "framer-motion";
-import { CheckCircle2 } from "lucide-react";
+import Reveal from "./Reveal";
 
 const pillars = [
   "Médicos certificados y especializados",
@@ -10,193 +9,67 @@ const pillars = [
 
 export default function About() {
   return (
-    <section
-      id="about"
-      style={{
-        background: "#FAFAF7",
-        padding: "7rem 2rem",
-      }}
-    >
-      <div
-        style={{
-          maxWidth: 1280,
-          margin: "0 auto",
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: "5rem",
-          alignItems: "center",
-        }}
-        className="about-grid"
-      >
-        {/* Text */}
-        <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-        >
-          <span
-            style={{
-              display: "inline-block",
-              background: "#FFF024",
-              color: "#1A1A18",
-              fontSize: "0.72rem",
-              fontWeight: 700,
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              padding: "0.3rem 0.8rem",
-              borderRadius: "4px",
-              marginBottom: "1.25rem",
-            }}
-          >
-            Sobre Orfit
-          </span>
-          <h2
-            style={{
-              fontFamily: '"Playfair Display", Georgia, serif',
-              fontSize: "clamp(2rem, 3.5vw, 3rem)",
-              fontWeight: 500,
-              color: "#1A1A18",
-              lineHeight: 1.2,
-              letterSpacing: "-0.02em",
-              marginBottom: "1.5rem",
-            }}
-          >
-            Medicina y arte,
-            <br />
-            en perfecto equilibrio.
-          </h2>
-          <p
-            style={{
-              color: "#6B6B64",
-              fontSize: "1rem",
-              lineHeight: 1.8,
-              marginBottom: "1.25rem",
-            }}
-          >
-            En Orfit creemos que la medicina estética es tanto ciencia como
-            arte. Cada tratamiento está guiado por un profundo conocimiento
-            anatómico y una refinada sensibilidad estética — para que los
-            resultados siempre se sientan como tú, solo que mejor.
-          </p>
-          <p
-            style={{
-              color: "#6B6B64",
-              fontSize: "1rem",
-              lineHeight: 1.8,
-              marginBottom: "2.5rem",
-            }}
-          >
-            Trabajamos con cada paciente de forma individual, escuchando
-            primero y tratando después. Seguridad, sutileza y satisfacción son
-            los pilares de todo lo que hacemos.
-          </p>
-
-          <ul
-            style={{
-              listStyle: "none",
-              display: "flex",
-              flexDirection: "column",
-              gap: "0.875rem",
-            }}
-          >
-            {pillars.map((p) => (
-              <li
-                key={p}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.75rem",
-                }}
-              >
-                <div
-                  style={{
-                    width: 22,
-                    height: 22,
-                    background: "#FFF024",
-                    borderRadius: "50%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    flexShrink: 0,
-                  }}
-                >
-                  <CheckCircle2 size={14} style={{ color: "#1A1A18" }} />
-                </div>
-                <span style={{ color: "#3A3A36", fontSize: "0.9375rem" }}>
-                  {p}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </motion.div>
-
-        {/* Image */}
-        <motion.div
-          initial={{ opacity: 0, x: 30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: "easeOut", delay: 0.15 }}
-          style={{ position: "relative" }}
-        >
-          <img
-            src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=700&q=80"
-            alt="Orfit clinic environment"
-            style={{
-              width: "100%",
-              height: 480,
-              objectFit: "cover",
-              display: "block",
-              borderRadius: "16px",
-            }}
-          />
-          {/* Floating badge */}
-          <div
-            style={{
-              position: "absolute",
-              bottom: "-1.5rem",
-              right: "-1rem",
-              background: "#1A1A18",
-              color: "#FAFAF7",
-              padding: "1.25rem 1.5rem",
-              borderRadius: "12px",
-              boxShadow: "0 8px 32px rgba(26,26,24,0.25)",
-            }}
-          >
-            <p
-              style={{
-                fontFamily: '"Playfair Display", Georgia, serif',
-                fontSize: "2rem",
-                fontWeight: 600,
-                color: "#FFF024",
-                lineHeight: 1,
-              }}
-            >
-              10+
-            </p>
-            <p
-              style={{
-                fontSize: "0.75rem",
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-                marginTop: "0.25rem",
-                color: "rgba(250,250,247,0.6)",
-              }}
-            >
+    <section id="about" className="bg-sand/60 py-24 lg:py-36">
+      <div className="container-x grid items-center gap-16 lg:grid-cols-12 lg:gap-10">
+        <Reveal className="relative lg:col-span-6">
+          <div className="relative mr-10 aspect-[4/5] overflow-hidden rounded-[2rem] sm:mr-24">
+            <img
+              src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=900&q=80"
+              alt="Tratamiento facial en el consultorio de Orfit"
+              loading="lazy"
+              className="size-full object-cover"
+            />
+          </div>
+          <div className="absolute -bottom-10 right-0 w-[46%] overflow-hidden rounded-t-full rounded-b-[1.5rem] border-[6px] border-cream shadow-[0_30px_60px_-30px_rgba(29,27,24,0.4)]">
+            <img
+              src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=600&q=80"
+              alt="Detalle de tratamiento facial"
+              loading="lazy"
+              className="aspect-[3/4] size-full object-cover"
+            />
+          </div>
+          <div className="absolute left-6 top-6 rounded-2xl bg-cream/95 px-5 py-4 backdrop-blur">
+            <p className="font-serif text-4xl font-light leading-none">10+</p>
+            <p className="mt-1 text-[0.65rem] uppercase tracking-[0.18em] text-muted">
               Años de experiencia
             </p>
           </div>
-        </motion.div>
-      </div>
+        </Reveal>
 
-      <style>{`
-        @media (max-width: 768px) {
-          .about-grid {
-            grid-template-columns: 1fr !important;
-            gap: 3rem !important;
-          }
-        }
-      `}</style>
+        <Reveal delay={0.15} className="lg:col-span-5 lg:col-start-8">
+          <span className="eyebrow">Sobre Orfit</span>
+          <h2 className="heading mt-6">
+            Medicina y arte, <em className="italic text-rose-deep">en perfecto equilibrio.</em>
+          </h2>
+          <div className="mt-8 space-y-5 leading-relaxed text-muted">
+            <p>
+              En Orfit creemos que la medicina estética es tanto ciencia como
+              arte. Cada tratamiento está guiado por un profundo conocimiento
+              anatómico y una refinada sensibilidad estética — para que los
+              resultados siempre se sientan como tú, solo que mejor.
+            </p>
+            <p>
+              Trabajamos con cada paciente de forma individual, escuchando
+              primero y tratando después. Seguridad, sutileza y satisfacción son
+              los pilares de todo lo que hacemos.
+            </p>
+          </div>
+
+          <ul className="mt-10 border-t border-ink/10">
+            {pillars.map((p, i) => (
+              <li
+                key={p}
+                className="flex items-baseline gap-5 border-b border-ink/10 py-4 text-[0.95rem]"
+              >
+                <span className="font-serif text-sm italic text-rose-deep">
+                  0{i + 1}
+                </span>
+                {p}
+              </li>
+            ))}
+          </ul>
+        </Reveal>
+      </div>
     </section>
   );
 }

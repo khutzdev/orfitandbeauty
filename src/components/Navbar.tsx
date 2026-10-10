@@ -1,165 +1,117 @@
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Menu, X, ArrowUpRight } from "lucide-react";
 import { Logo } from "./Logo";
-
-const links = [
-  { label: "Tratamientos", href: "#procedures" },
-  { label: "Nosotros", href: "#about" },
-  { label: "Resultados", href: "#why-us" },
-  { label: "Contacto", href: "#contact" },
-];
+import { navLinks } from "../data/site";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+  }, [menuOpen]);
 
   return (
-    <header className="fixed top-0 inset-x-0 z-50 border-b border-b-[#E8E0D8] backdrop-blur-lg bg-[#FAFAF6]">
-      <nav className="h-20 flex items-center justify-between gap-10 px-12">
-        {/* Logo — left */}
-        <a className="flex items-center no-underline shrink-0" href="#">
-          <Logo style={{ height: 52, width: "auto" }} />
+    <header
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ease-soft ${
+        scrolled || menuOpen
+          ? "border-b border-ink/5 bg-cream/85 backdrop-blur-xl"
+          : "border-b border-transparent bg-transparent"
+      }`}
+    >
+      <nav
+        className={`container-x flex items-center justify-between gap-8 transition-all duration-500 ${
+          scrolled ? "h-18" : "h-22"
+        }`}
+      >
+        <a href="#" className="shrink-0" aria-label="Orfit — inicio">
+          <Logo
+            className={`w-auto transition-all duration-500 ${scrolled ? "h-10" : "h-12"}`}
+          />
         </a>
 
-        {/* Links — beside logo */}
-        <div
-          style={{ display: "flex", alignItems: "center", gap: "1.75rem" }}
-          className="desktop-nav"
-        >
-          {links.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              style={{
-                color: "#3A3A36",
-                textDecoration: "none",
-                fontSize: "0.8rem",
-                fontWeight: 500,
-                letterSpacing: "0.07em",
-                textTransform: "uppercase",
-                transition: "color 0.2s",
-              }}
-              onMouseEnter={(e) =>
-                ((e.target as HTMLElement).style.color = "#1A1A18")
-              }
-              onMouseLeave={(e) =>
-                ((e.target as HTMLElement).style.color = "#3A3A36")
-              }
-            >
-              {l.label}
-            </a>
+        <ul className="hidden items-center gap-9 lg:flex">
+          {navLinks.map((l) => (
+            <li key={l.href}>
+              <a
+                href={l.href}
+                className="group relative text-[0.78rem] font-medium uppercase tracking-[0.14em] text-ink/70 transition-colors hover:text-ink"
+              >
+                {l.label}
+                <span className="absolute -bottom-1.5 left-0 h-px w-full origin-left scale-x-0 bg-ink transition-transform duration-500 ease-soft group-hover:scale-x-100" />
+              </a>
+            </li>
           ))}
-        </div>
+        </ul>
 
-        {/* Spacer */}
-        {/*<div style={{ flex: 1 }} />*/}
-
-        {/* Reservar — far right */}
         <a
           href="#contact"
-          style={{
-            background: "#FFF024",
-            color: "#1A1A18",
-            textDecoration: "none",
-            padding: "0.55rem 1.4rem",
-            fontSize: "0.8rem",
-            fontWeight: 700,
-            letterSpacing: "0.08em",
-            textTransform: "uppercase",
-            borderRadius: "6px",
-            flexShrink: 0,
-            transition: "background 0.2s, transform 0.15s",
-          }}
-          className="desktop-nav"
-          onMouseEnter={(e) => {
-            (e.currentTarget as HTMLElement).style.background = "#e6d800";
-            (e.currentTarget as HTMLElement).style.transform =
-              "translateY(-1px)";
-          }}
-          onMouseLeave={(e) => {
-            (e.currentTarget as HTMLElement).style.background = "#FFF024";
-            (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
-          }}
+          className="btn-dark hidden px-6 py-3 lg:inline-flex"
         >
-          Reservar
+          Reservar cita
+          <ArrowUpRight size={15} strokeWidth={1.75} />
         </a>
 
-        {/* Mobile toggle */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          style={{
-            display: "none",
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-            color: "#1A1A18",
-            padding: "0.25rem",
-            flexShrink: 0,
-          }}
-          className="mobile-menu-btn"
-          aria-label="Toggle menu"
+          className="-mr-2 p-2 text-ink lg:hidden"
+          aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
+          aria-expanded={menuOpen}
         >
-          {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          {menuOpen ? <X size={24} strokeWidth={1.5} /> : <Menu size={24} strokeWidth={1.5} />}
         </button>
       </nav>
 
-      {/* Mobile Menu */}
-      {menuOpen && (
-        <div
-          style={{
-            background: "#FAFAF7",
-            borderTop: "1px solid #E8E0D8",
-            padding: "1.5rem 2rem",
-            display: "flex",
-            flexDirection: "column",
-            gap: "1.25rem",
-          }}
-        >
-          {links.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              onClick={() => setMenuOpen(false)}
-              style={{
-                color: "#1A1A18",
-                textDecoration: "none",
-                fontSize: "1rem",
-                fontWeight: 500,
-                letterSpacing: "0.04em",
-              }}
-            >
-              {l.label}
-            </a>
-          ))}
-          <a
-            href="#contact"
-            onClick={() => setMenuOpen(false)}
-            style={{
-              background: "#FFF024",
-              color: "#1A1A18",
-              textDecoration: "none",
-              padding: "0.75rem 1.5rem",
-              fontSize: "0.875rem",
-              fontWeight: 700,
-              textAlign: "center",
-              letterSpacing: "0.06em",
-              textTransform: "uppercase",
-              borderRadius: "6px",
-            }}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "calc(100dvh - 5.5rem)" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="overflow-hidden lg:hidden"
           >
-            Reservar
-          </a>
-        </div>
-      )}
-
-      {/*<style>{`
-        @media (max-width: 768px) {
-          .desktop-nav { display: none !important; }
-          .mobile-menu-btn { display: flex !important; }
-        }
-        @media (min-width: 769px) {
-          .mobile-menu-btn { display: none !important; }
-        }
-      `}</style>*/}
+            <div className="container-x flex h-full flex-col justify-between pb-10 pt-6">
+              <ul className="flex flex-col">
+                {navLinks.map((l, i) => (
+                  <motion.li
+                    key={l.href}
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 + i * 0.05, duration: 0.5 }}
+                    className="border-b border-ink/10"
+                  >
+                    <a
+                      href={l.href}
+                      onClick={() => setMenuOpen(false)}
+                      className="flex items-baseline justify-between py-5 font-serif text-3xl font-light"
+                    >
+                      {l.label}
+                      <span className="font-sans text-xs text-muted">0{i + 1}</span>
+                    </a>
+                  </motion.li>
+                ))}
+              </ul>
+              <a
+                href="#contact"
+                onClick={() => setMenuOpen(false)}
+                className="btn-dark w-full"
+              >
+                Reservar cita
+                <ArrowUpRight size={15} strokeWidth={1.75} />
+              </a>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

@@ -1,215 +1,49 @@
-import { motion } from "framer-motion";
 import { stats } from "../data/procedures";
-import { ShieldCheck, Microscope, HeartHandshake, Award } from "lucide-react";
-
-const pillars = [
-  {
-    icon: <ShieldCheck size={26} style={{ color: "#FFF024" }} />,
-    title: "Seguridad Ante Todo",
-    description:
-      "Cada tratamiento sigue protocolos basados en evidencia. Usamos únicamente productos certificados de proveedores premium para garantizar tu seguridad en cada paso.",
-  },
-  {
-    icon: <Microscope size={26} style={{ color: "#FFF024" }} />,
-    title: "Precisión Clínica",
-    description:
-      "Nuestros especialistas combinan formación médica con educación continua en las técnicas más avanzadas, asegurando resultados precisos y predecibles.",
-  },
-  {
-    icon: <HeartHandshake size={26} style={{ color: "#FFF024" }} />,
-    title: "Atención Personalizada",
-    description:
-      "Sin tratamientos genéricos. Cada plan se diseña en torno a tu anatomía, objetivos y estilo de vida para resultados que complementan tus rasgos naturales.",
-  },
-  {
-    icon: <Award size={26} style={{ color: "#FFF024" }} />,
-    title: "Resultados Comprobados",
-    description:
-      "Más de una década de experiencia y miles de pacientes satisfechos reflejan nuestro compromiso con la excelencia y la mejora continua.",
-  },
-];
+import { pillars } from "../data/site";
+import Reveal from "./Reveal";
 
 export default function WhyUs() {
   return (
-    <section
-      id="why-us"
-      style={{
-        background: "#1A1A18",
-        padding: "7rem 2rem",
-      }}
-    >
-      <div style={{ maxWidth: 1280, margin: "0 auto" }}>
-        {/* Stats bar */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
-            gap: "1px",
-            background: "rgba(255,255,255,0.06)",
-            marginBottom: "6rem",
-            border: "1px solid rgba(255,255,255,0.06)",
-            borderRadius: "16px",
-            overflow: "hidden",
-          }}
-          className="stats-grid"
+    <section id="why-us" className="relative overflow-hidden bg-forest py-24 text-cream lg:py-36">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-48 top-0 size-[36rem] rounded-full bg-mint/10 blur-3xl"
+      />
+
+      <div className="container-x relative">
+        <div className="grid gap-10 lg:grid-cols-12">
+          <Reveal className="lg:col-span-6">
+            <span className="eyebrow text-blush!">Por qué Orfit</span>
+            <h2 className="heading mt-6">
+              Excelencia en la que <em className="italic text-blush">puedes confiar</em>
+            </h2>
+          </Reveal>
+        </div>
+
+        <Reveal
+          delay={0.1}
+          className="mt-16 grid grid-cols-2 gap-px border-y border-cream/15 bg-cream/15 lg:mt-20 lg:grid-cols-4"
         >
-          {stats.map((s, i) => (
-            <div
-              key={i}
-              style={{
-                background: "#1A1A18",
-                padding: "2.5rem 2rem",
-                textAlign: "center",
-              }}
-            >
-              <p
-                style={{
-                  fontFamily: '"Playfair Display", Georgia, serif',
-                  fontSize: "clamp(2rem, 3vw, 2.75rem)",
-                  fontWeight: 600,
-                  color: "#FFF024",
-                  lineHeight: 1,
-                  marginBottom: "0.5rem",
-                }}
-              >
-                {s.value}
-              </p>
-              <p
-                style={{
-                  color: "rgba(250,250,247,0.5)",
-                  fontSize: "0.8rem",
-                  letterSpacing: "0.1em",
-                  textTransform: "uppercase",
-                }}
-              >
+          {stats.map((s) => (
+            <div key={s.label} className="bg-forest px-2 py-10 sm:px-6 lg:first:pl-0">
+              <p className="font-serif text-4xl font-light tracking-tight sm:text-5xl lg:text-6xl">{s.value}</p>
+              <p className="mt-3 text-[0.68rem] uppercase tracking-[0.18em] text-cream/60">
                 {s.label}
               </p>
             </div>
           ))}
-        </motion.div>
+        </Reveal>
 
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          style={{ textAlign: "center", marginBottom: "4rem" }}
-        >
-          <span
-            style={{
-              display: "inline-block",
-              background: "#FFF024",
-              color: "#1A1A18",
-              fontSize: "0.72rem",
-              fontWeight: 700,
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              padding: "0.3rem 0.8rem",
-              borderRadius: "4px",
-              marginBottom: "1.25rem",
-            }}
-          >
-            Por qué Orfit
-          </span>
-          <h2
-            style={{
-              fontFamily: '"Playfair Display", Georgia, serif',
-              fontSize: "clamp(2rem, 3.5vw, 2.875rem)",
-              fontWeight: 500,
-              color: "#FAFAF7",
-              letterSpacing: "-0.02em",
-              lineHeight: 1.2,
-            }}
-          >
-            Excelencia en la que puedes confiar
-          </h2>
-        </motion.div>
-
-        {/* Pillars grid */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
-            gap: "1.5rem",
-          }}
-        >
+        <div className="mt-16 grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:mt-20 lg:grid-cols-4">
           {pillars.map((p, i) => (
-            <motion.div
-              key={p.title}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: i * 0.1 }}
-              style={{
-                padding: "2rem",
-                border: "1px solid rgba(255,255,255,0.08)",
-                borderRadius: "16px",
-                transition: "border-color 0.3s, background 0.3s",
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.borderColor =
-                  "rgba(255,240,36,0.35)";
-                (e.currentTarget as HTMLElement).style.background =
-                  "rgba(255,240,36,0.04)";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.borderColor =
-                  "rgba(255,255,255,0.08)";
-                (e.currentTarget as HTMLElement).style.background =
-                  "transparent";
-              }}
-            >
-              <div
-                style={{
-                  width: 48,
-                  height: 48,
-                  background: "rgba(255,240,36,0.12)",
-                  borderRadius: "12px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  marginBottom: "1.25rem",
-                }}
-              >
-                {p.icon}
-              </div>
-              <h3
-                style={{
-                  fontFamily: '"Playfair Display", Georgia, serif',
-                  fontSize: "1.25rem",
-                  fontWeight: 500,
-                  color: "#FAFAF7",
-                  marginBottom: "0.875rem",
-                }}
-              >
-                {p.title}
-              </h3>
-              <p
-                style={{
-                  color: "rgba(250,250,247,0.55)",
-                  fontSize: "0.9rem",
-                  lineHeight: 1.7,
-                }}
-              >
-                {p.description}
-              </p>
-            </motion.div>
+            <Reveal key={p.title} delay={i * 0.08}>
+              <span className="font-serif text-sm italic text-blush">0{i + 1}</span>
+              <h3 className="mt-4 font-serif text-2xl font-light tracking-tight">{p.title}</h3>
+              <p className="mt-4 text-sm leading-relaxed text-cream/65">{p.description}</p>
+            </Reveal>
           ))}
         </div>
       </div>
-
-      <style>{`
-        @media (max-width: 640px) {
-          .stats-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-          }
-        }
-      `}</style>
     </section>
   );
 }

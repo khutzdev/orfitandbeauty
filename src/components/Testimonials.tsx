@@ -1,149 +1,73 @@
-import { motion } from "framer-motion";
-import { Quote } from "lucide-react";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { testimonials } from "../data/procedures";
+import Reveal from "./Reveal";
 
 export default function Testimonials() {
-  return (
-    <section
-      id="testimonials"
-      style={{
-        background: "#FAFAF7",
-        padding: "7rem 2rem",
-        borderTop: "1px solid #E8E0D8",
-      }}
-    >
-      <div style={{ maxWidth: 1280, margin: "0 auto" }}>
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          style={{ textAlign: "center", marginBottom: "4rem" }}
-        >
-          <span
-            style={{
-              display: "inline-block",
-              background: "#FFF024",
-              color: "#1A1A18",
-              fontSize: "0.72rem",
-              fontWeight: 700,
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              padding: "0.3rem 0.8rem",
-              borderRadius: "4px",
-              marginBottom: "1.25rem",
-            }}
-          >
-            Historias de Pacientes
-          </span>
-          <h2
-            style={{
-              fontFamily: '"Playfair Display", Georgia, serif',
-              fontSize: "clamp(2rem, 3.5vw, 2.875rem)",
-              fontWeight: 500,
-              color: "#1A1A18",
-              letterSpacing: "-0.02em",
-              lineHeight: 1.2,
-            }}
-          >
-            Lo que dicen nuestros pacientes
-          </h2>
-        </motion.div>
+  const [active, setActive] = useState(0);
+  const t = testimonials[active];
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-            gap: "1.5rem",
-          }}
-        >
-          {testimonials.map((t, i) => (
-            <motion.div
-              key={t.name}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: i * 0.12 }}
-              style={{
-                background: "#FAFAF7",
-                border: "1.5px solid #E8E0D8",
-                borderRadius: "16px",
-                padding: "2.5rem",
-                position: "relative",
-                transition: "border-color 0.25s, box-shadow 0.25s",
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.borderColor = "#000";
-                (e.currentTarget as HTMLElement).style.boxShadow =
-                  "0 8px 32px rgba(0,0,0,0.12)";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.borderColor = "#E8E0D8";
-                (e.currentTarget as HTMLElement).style.boxShadow = "none";
-              }}
+  useEffect(() => {
+    const id = setTimeout(() => setActive((a) => (a + 1) % testimonials.length), 8000);
+    return () => clearTimeout(id);
+  }, [active]);
+
+  return (
+    <section id="testimonials" className="bg-blush/50 py-24 lg:py-36">
+      <div className="container-x">
+        <Reveal className="mx-auto max-w-4xl text-center">
+          <span className="eyebrow">Historias de pacientes</span>
+
+          <div className="relative mt-20 grid min-h-[16rem] place-items-center sm:min-h-[14rem]">
+            <span
+              aria-hidden
+              className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 font-serif text-[9rem] leading-none text-rose/30"
             >
-              <div
-                style={{
-                  width: 36,
-                  height: 36,
-                  background: "#FFF024",
-                  borderRadius: "8px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  marginBottom: "1.5rem",
-                }}
+              “
+            </span>
+            <AnimatePresence mode="wait">
+              <motion.figure
+                key={t.name}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -16 }}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                className="relative"
               >
-                <Quote size={18} style={{ color: "#1A1A18" }} />
-              </div>
-              <p
-                style={{
-                  color: "#3A3A36",
-                  fontSize: "0.9375rem",
-                  lineHeight: 1.8,
-                  marginBottom: "2rem",
-                  fontStyle: "italic",
-                }}
+                <blockquote className="font-serif text-2xl font-light leading-snug tracking-tight sm:text-3xl lg:text-[2.6rem] lg:leading-[1.2]">
+                  {t.text}
+                </blockquote>
+                <figcaption className="mt-10">
+                  <span className="font-serif text-lg italic">{t.name}</span>
+                  <span className="mx-3 text-muted">—</span>
+                  <span className="text-[0.7rem] uppercase tracking-[0.18em] text-muted">
+                    {t.treatment}
+                  </span>
+                </figcaption>
+              </motion.figure>
+            </AnimatePresence>
+          </div>
+
+          <div className="mt-12 flex justify-center gap-3" role="tablist" aria-label="Testimonios">
+            {testimonials.map((item, i) => (
+              <button
+                key={item.name}
+                role="tab"
+                aria-selected={i === active}
+                aria-label={`Testimonio de ${item.name}`}
+                onClick={() => setActive(i)}
+                className="group relative h-6 w-14"
               >
-                "{t.text}"
-              </p>
-              <div
-                style={{
-                  borderTop: "1px solid #E8E0D8",
-                  paddingTop: "1.25rem",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "flex-end",
-                }}
-              >
-                <p
-                  style={{
-                    fontFamily: '"Playfair Display", Georgia, serif',
-                    fontWeight: 500,
-                    color: "#1A1A18",
-                    fontSize: "1rem",
-                  }}
-                >
-                  {t.name}
-                </p>
+                <span className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-ink/20" />
                 <span
-                  style={{
-                    fontSize: "0.68rem",
-                    fontWeight: 700,
-                    letterSpacing: "0.12em",
-                    textTransform: "uppercase",
-                    background: "#1A1A18",
-                    color: "#FFF024",
-                    padding: "0.2rem 0.6rem",
-                    borderRadius: "4px",
-                  }}
-                >
-                  {t.treatment}
-                </span>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+                  className={`absolute left-0 top-1/2 h-px -translate-y-1/2 bg-ink transition-all duration-700 ${
+                    i === active ? "w-full" : "w-0 group-hover:w-1/3"
+                  }`}
+                />
+              </button>
+            ))}
+          </div>
+        </Reveal>
       </div>
     </section>
   );
