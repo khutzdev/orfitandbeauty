@@ -11,18 +11,45 @@ export const bookingLink = () => waLink(BOOKING_MESSAGE);
 
 export const navLinks = [
   { label: 'Servicios', href: '/#services' },
+  { label: 'En línea', href: '/#online' },
   { label: 'Especialista', href: '/#specialist' },
   { label: 'Tienda', href: '/tienda' },
-  { label: 'Preguntas', href: '/#faq' },
   { label: 'Contacto', href: '/#contact' },
 ];
 
 export const contact = {
   phone: '+52 741 110 8466',
   phoneHref: 'tel:+527411108466',
-  email: 'kricodelao@gmail.com',
-  emailHref: 'mailto:kricodelao@gmail.com',
+  // El correo real no se muestra: se guarda codificado y se arma al hacer clic.
+  emailLabel: 'Envíanos un correo',
+  emailEncoded: 'a3JpY29kZWxhb0BnbWFpbC5jb20=',
+  address: 'Francisco Javier Mina 9, Barrio de la Cruz Grande\n41700 Ometepec, Guerrero',
+  mapsHref: 'https://share.google/TdZVoYw0cml4e0fU8',
+  directionsHref: 'https://www.google.com/maps/dir/?api=1&destination=16.6899314,-98.4027276',
+  mapEmbed:
+    'https://maps.google.com/maps?q=OR%C2%B4Fit%20%26%20Beauty%2C%20Francisco%20Javier%20Mina%209%2C%20Ometepec%2C%20Guerrero&z=16&output=embed',
 };
+
+export const openEmail = () => {
+  window.location.href = `mailto:${atob(contact.emailEncoded)}`;
+};
+
+// Horario publicado en Google. Día de la semana: 0 = domingo.
+export const openingHours: Record<number, [number, number][]> = {
+  0: [],
+  1: [[10, 14], [16, 19]],
+  2: [[10, 14], [16, 19]],
+  3: [[10, 14], [16, 19]],
+  4: [[10, 14], [16, 19]],
+  5: [[10, 14], [16, 19]],
+  6: [[10, 18]],
+};
+
+export const hoursSummary = [
+  { days: 'Lunes a viernes', hours: '10:00–14:00 · 16:00–19:00' },
+  { days: 'Sábado', hours: '10:00–18:00' },
+  { days: 'Domingo', hours: 'Cerrado' },
+];
 
 export const socials = [
   {
@@ -78,27 +105,33 @@ export const stats = [
   { value: '98%', label: 'Índice de Satisfacción' },
 ];
 
-export const testimonials = [
-  {
-    name: 'Sofía M.',
-    text: 'Los resultados fueron increíblemente naturales. Me veo como yo misma — solo más descansada y radiante. El equipo me hizo sentir completamente tranquila durante todo el proceso.',
-    treatment: 'Toxina botulínica + Rellenos',
-  },
-  {
-    name: 'Valentina R.',
-    text: 'Mi piel nunca había lucido tan bien. Después de mis sesiones de Hidrafacial, la textura y el brillo son de otro nivel. Recomiendo ampliamente Orfit a quien esté considerando tratamientos estéticos.',
-    treatment: 'Hidrafacial',
-  },
-  {
-    name: 'Camila T.',
-    text: 'Profesionales, precisos y genuinamente atentos. El relleno de labios fue exactamente lo que quería — un volumen sutil que luce completamente natural. Volveré sin duda.',
-    treatment: 'Fillers / Rellenos',
-  },
-];
+export const googleReviews = {
+  rating: 5.0,
+  count: 4,
+  href: 'https://share.google/TdZVoYw0cml4e0fU8',
+  reviews: [
+    {
+      author: 'Wendy C.',
+      date: 'octubre 2026',
+      text: 'Recomiendo ampliamente a la Dra De La O, es una excelente profesional, muy amable, atenta y muy responsable con su profesión. Además de que ayuda a dar buenos resultados a sus pacientes.',
+    },
+    {
+      author: 'Adamari M.',
+      date: 'octubre 2026',
+      text: 'Súper recomendado! Excelente doctora. Si he visto cambios así que no duden en venir.',
+    },
+    {
+      author: 'Alva S.',
+      date: 'octubre 2026',
+      text: 'Buenas tardes, me gustó mucho la explicación que me dio la doctora sobre mi tratamiento.',
+    },
+  ],
+};
 
 export const specialist = {
   name: 'Dra. Karen Alicia de la O Rico',
   role: 'Bariatría · Medicina Estética · Auriculoterapia',
+  licenses: ['12171849', '13832250'],
   title: 'Ciencia y calidez al servicio de tu belleza',
   // Agregar la foto real de la doctora (p. ej. '/dra-karen.jpg' en /public). Vacío = monograma.
   image: '',

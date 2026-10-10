@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
-import { serviceCategories } from "../data/services";
+import { ArrowUpRight, Video } from "lucide-react";
+import { Link } from "react-router";
+import { generalConsultation, serviceCategories } from "../data/services";
 import { waLink } from "../data/site";
 import Reveal from "./Reveal";
 
@@ -87,17 +88,13 @@ export default function Services() {
                     {active.tagline}
                   </p>
                   <p className="mt-4 leading-relaxed text-muted">{active.intro}</p>
-                  <a
-                    href={waLink(
-                      `¡Hola! Me gustaría agendar una valoración para ${active.name}.`,
-                    )}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <Link
+                    to={`/agendar?servicio=${encodeURIComponent(generalConsultation.name)}`}
                     className="btn-dark mt-8"
                   >
                     Agendar valoración
                     <ArrowUpRight size={15} strokeWidth={1.75} />
-                  </a>
+                  </Link>
                 </div>
               </div>
 
@@ -116,6 +113,11 @@ export default function Services() {
                       <span>
                         <span className="block font-serif text-2xl font-light tracking-tight transition-colors group-hover:text-rose-deep sm:text-[1.75rem]">
                           {s.name}
+                          {s.online && (
+                            <span className="ml-3 inline-flex translate-y-[-0.2em] items-center gap-1 rounded-full bg-mint px-2.5 py-1 align-middle font-sans text-[0.6rem] font-semibold uppercase tracking-[0.12em] text-forest">
+                              <Video size={11} strokeWidth={2} /> También en línea
+                            </span>
+                          )}
                         </span>
                         <span className="mt-2 block max-w-xl text-[0.95rem] leading-relaxed text-muted">
                           {s.description}

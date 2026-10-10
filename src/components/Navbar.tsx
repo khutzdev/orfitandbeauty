@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Link } from "react-router";
 import { Menu, X, ArrowUpRight, ShoppingBag } from "lucide-react";
 import { Logo } from "./Logo";
-import { bookingLink, navLinks } from "../data/site";
+import { navLinks } from "../data/site";
 import { useCart } from "../store/cart";
 
 function CartButton({ onClick }: { onClick?: () => void }) {
@@ -77,15 +77,10 @@ export default function Navbar() {
 
         <div className="flex items-center gap-2">
           <CartButton onClick={() => setMenuOpen(false)} />
-          <a
-            href={bookingLink()}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-dark hidden px-6 py-3 lg:inline-flex"
-          >
+          <Link to="/agendar" className="btn-dark hidden px-6 py-3 lg:inline-flex">
             Reservar cita
             <ArrowUpRight size={15} strokeWidth={1.75} />
-          </a>
+          </Link>
 
           <button
             onClick={() => setMenuOpen(!menuOpen)}
@@ -128,16 +123,10 @@ export default function Navbar() {
                   </motion.li>
                 ))}
               </ul>
-              <a
-                href={bookingLink()}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setMenuOpen(false)}
-                className="btn-dark w-full"
-              >
+              <Link to="/agendar" onClick={() => setMenuOpen(false)} className="btn-dark w-full">
                 Reservar cita
                 <ArrowUpRight size={15} strokeWidth={1.75} />
-              </a>
+              </Link>
             </div>
           </motion.div>
         )}

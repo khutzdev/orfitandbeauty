@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import { Instagram, Facebook, ArrowUp } from "lucide-react";
 import { Logo } from "./Logo";
-import { contact, navLinks, socials } from "../data/site";
+import { contact, navLinks, openEmail, socials, specialist } from "../data/site";
 
 const socialIcons: Record<string, React.ReactNode> = {
   Instagram: <Instagram size={16} strokeWidth={1.5} />,
@@ -21,6 +21,14 @@ export default function Footer() {
               Clínica de medicina estética, regenerativa y bariatría dedicada a
               resultados naturales y duraderos.
             </p>
+            <a
+              href={contact.directionsHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-6 block whitespace-pre-line text-sm leading-relaxed text-cream/60 transition-colors hover:text-blush"
+            >
+              {contact.address}
+            </a>
           </div>
 
           <nav className="md:col-span-3" aria-label="Pie de página">
@@ -39,9 +47,9 @@ export default function Footer() {
           <div className="md:col-span-4">
             <p className="text-[0.65rem] uppercase tracking-[0.2em] text-cream/40">Contacto</p>
             <div className="mt-5 space-y-3 text-cream/75">
-              <a href={contact.emailHref} className="block transition-colors hover:text-blush">
-                {contact.email}
-              </a>
+              <button type="button" onClick={openEmail} className="block transition-colors hover:text-blush">
+                {contact.emailLabel}
+              </button>
               <a href={contact.phoneHref} className="block transition-colors hover:text-blush">
                 {contact.phone}
               </a>
@@ -64,7 +72,10 @@ export default function Footer() {
         </div>
 
         <div className="flex flex-col gap-4 py-8 text-xs text-cream/40 sm:flex-row sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} Orfit. Todos los derechos reservados.</p>
+          <p>
+            © {new Date().getFullYear()} OR´Fit &amp; Beauty · {specialist.name} · Céd. Prof.{" "}
+            {specialist.licenses.join(" · ")}
+          </p>
           <p>Los resultados pueden variar. Consulta con un especialista.</p>
           <a
             href="#"

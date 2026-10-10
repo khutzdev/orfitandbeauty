@@ -26,6 +26,12 @@ export default function Specialist() {
             <p className="mt-1.5 text-[0.65rem] uppercase tracking-[0.16em] text-muted">
               {specialist.role}
             </p>
+            <p className="mt-3 border-t border-ink/10 pt-3 text-xs text-muted">
+              Cédulas profesionales{" "}
+              <span className="font-semibold tabular-nums text-ink">
+                {specialist.licenses.join(" · ")}
+              </span>
+            </p>
           </div>
         </Reveal>
 

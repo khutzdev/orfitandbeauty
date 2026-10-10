@@ -1,6 +1,8 @@
 export interface Service {
   name: string;
   description: string;
+  /** Disponible como consulta en línea (videollamada). */
+  online?: boolean;
 }
 
 export interface ServiceCategory {
@@ -28,11 +30,13 @@ export const serviceCategories: ServiceCategory[] = [
       },
       {
         name: 'Bariatría',
+        online: true,
         description:
           'Tratamiento del sobrepeso y la obesidad mediante diagnóstico médico, nutricional, psicológico y farmacológico.',
       },
       {
         name: 'Protocolo VIP Tirzepatide (mensual)',
+        online: true,
         description:
           'Lo más moderno que existe. Ayuda a que el cuerpo procese mejor la grasa y controla el apetito de forma impresionante, siempre con seguimiento médico.',
       },
@@ -153,6 +157,18 @@ export const serviceCategories: ServiceCategory[] = [
       },
     ],
   },
+];
+
+// Opción general para quien aún no sabe qué tratamiento necesita.
+export const generalConsultation: Service = {
+  name: 'Valoración médica general',
+  description: 'Analizamos tu historial y tus objetivos para diseñar tu plan personalizado.',
+  online: true,
+};
+
+export const onlineServices = [
+  generalConsultation,
+  ...serviceCategories.flatMap((c) => c.services.filter((s) => s.online)),
 ];
 
 export const allServiceNames = serviceCategories.flatMap((c) => c.services.map((s) => s.name));

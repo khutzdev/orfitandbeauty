@@ -1,34 +1,178 @@
-import { useMemo, useState } from "react";
-import { Search, SlidersHorizontal } from "lucide-react";
-import { productBrands, productCategories, products } from "../data/products";
+import { useEffect, useMemo, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Check, ChevronDown, Search, SlidersHorizontal, X } from "lucide-react";
+import { productBrands, productCategories, products, type Product } from "../data/products";
 import ProductCard from "../components/shop/ProductCard";
 import Reveal from "../components/Reveal";
 
-type Sort = "featured" | "price-asc" | "price-desc";
+type Sort = "featured" | "price-asc" | "price-desc" | "name";
 
-const chip = (active: boolean) =>
-  `whitespace-nowrap rounded-full border px-4 py-2 text-[0.72rem] font-semibold uppercase tracking-[0.12em] transition-colors ${
-    active ? "border-ink bg-ink text-cream" : "border-ink/15 text-ink/70 hover:border-ink hover:text-ink"
-  }`;
+const sortLabels: Record<Sort, string> = {
+  featured: "Destacados",
+  "price-asc": "Precio: menor a mayor",
+  "price-desc": "Precio: mayor a menor",
+  name: "Nombre: A–Z",
+};
+
+interface Filters {
+  category: string | null;
+  brands: string[];
+  query: string;
+}
+
+const matches = (p: Product, f: Filters, skip?: "category" | "brands") => {
+  const q = f.query.trim().toLowerCase();
+  return (
+    (skip === "category" || !f.category || p.category === f.category) &&
+    (skip === "brands" || f.brands.length === 0 || f.brands.includes(p.brand)) &&
+    (!q || `${p.name} ${p.brand} ${p.category} ${p.description}`.toLowerCase().includes(q))
+  );
+};
+
+function FilterPanel({
+  filters,
+  setFilters,
+}: {
+  filters: Filters;
+  setFilters: (f: Filters) => void;
+}) {
+  const categoryCount = (c: string | null) =>
+    products.filter((p) => matches(p, { ...filters, category: c }, c ? undefined : "category")).length;
+  const brandCount = (b: string) =>
+    products.filter((p) => matches(p, { ...filters, brands: [b] })).length;
+
+  const toggleBrand = (b: string) =>
+    setFilters({
+      ...filters,
+      brands: filters.brands.includes(b)
+        ? filters.brands.filter((x) => x !== b)
+        : [...filters.brands, b],
+    });
+
+  return (
+    <div className="space-y-10">
+      <fieldset>
+        <legend className="text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-muted">
+          Categoría
+        </legend>
+        <ul className="mt-4 space-y-1">
+          {[null, ...productCategories].map((c) => {
+            const active = filters.category === c;
+            const count = categoryCount(c);
+            return (
+              <li key={c ?? "all"}>
+                <button
+                  type="button"
+                  onClick={() => setFilters({ ...filters, category: c })}
+                  aria-pressed={active}
+                  disabled={count === 0 && !active}
+                  className={`flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left text-[0.95rem] transition-colors disabled:opacity-35 ${
+                    active ? "bg-ink text-cream" : "hover:bg-sand"
+                  }`}
+                >
+                  {c ?? "Todos los productos"}
+                  <span className={`text-xs tabular-nums ${active ? "text-cream/60" : "text-muted"}`}>
+                    {count}
+                  </span>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </fieldset>
+
+      <fieldset>
+        <legend className="text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-muted">
+          Marca
+        </legend>
+        <ul className="mt-4 space-y-1">
+          {productBrands.map((b) => {
+            const checked = filters.brands.includes(b);
+            return (
+              <li key={b}>
+                <label className="flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-sand">
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    onChange={() => toggleBrand(b)}
+                    className="peer sr-only"
+                  />
+                  <span
+                    className={`grid size-5 shrink-0 place-items-center rounded-md border transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-rose ${
+                      checked ? "border-ink bg-ink text-cream" : "border-ink/25"
+                    }`}
+                  >
+                    {checked && <Check size={12} strokeWidth={2.5} />}
+                  </span>
+                  <span className="flex-1 text-[0.95rem]">{b}</span>
+                  <span className="text-xs tabular-nums text-muted">{brandCount(b)}</span>
+                </label>
+              </li>
+            );
+          })}
+        </ul>
+      </fieldset>
+    </div>
+  );
+}
+
+function SortSelect({ sort, setSort }: { sort: Sort; setSort: (s: Sort) => void }) {
+  return (
+    <label className="relative flex h-14 items-center rounded-full border border-ink/15 bg-cream pl-5 pr-11 transition-colors focus-within:border-ink hover:border-ink/40">
+      <span className="mr-2 hidden text-sm text-muted sm:inline">Ordenar:</span>
+      <select
+        value={sort}
+        onChange={(e) => setSort(e.target.value as Sort)}
+        className="absolute inset-0 cursor-pointer opacity-0"
+        aria-label="Ordenar productos"
+      >
+        {Object.entries(sortLabels).map(([value, label]) => (
+          <option key={value} value={value}>
+            {label}
+          </option>
+        ))}
+      </select>
+      <span className="truncate text-sm font-medium">{sortLabels[sort]}</span>
+      <ChevronDown size={16} className="pointer-events-none absolute right-4 text-muted" />
+    </label>
+  );
+}
 
 export default function Shop() {
-  const [category, setCategory] = useState<string | null>(null);
-  const [brand, setBrand] = useState("");
-  const [query, setQuery] = useState("");
+  const [filters, setFilters] = useState<Filters>({ category: null, brands: [], query: "" });
   const [sort, setSort] = useState<Sort>("featured");
+  const [sheetOpen, setSheetOpen] = useState(false);
+
+  useEffect(() => {
+    if (!sheetOpen) return;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [sheetOpen]);
 
   const visible = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    const list = products.filter(
-      (p) =>
-        (!category || p.category === category) &&
-        (!brand || p.brand === brand) &&
-        (!q || `${p.name} ${p.brand} ${p.description}`.toLowerCase().includes(q)),
-    );
-    if (sort === "price-asc") return [...list].sort((a, b) => a.price - b.price);
-    if (sort === "price-desc") return [...list].sort((a, b) => b.price - a.price);
-    return [...list].sort((a, b) => Number(!!b.featured) - Number(!!a.featured));
-  }, [category, brand, query, sort]);
+    const list = products.filter((p) => matches(p, filters));
+    const sorters: Record<Sort, (a: Product, b: Product) => number> = {
+      featured: (a, b) => Number(!!b.featured) - Number(!!a.featured),
+      "price-asc": (a, b) => a.price - b.price,
+      "price-desc": (a, b) => b.price - a.price,
+      name: (a, b) => a.name.localeCompare(b.name, "es"),
+    };
+    return [...list].sort(sorters[sort]);
+  }, [filters, sort]);
+
+  const activeChips = [
+    ...(filters.category
+      ? [{ label: filters.category, clear: () => setFilters({ ...filters, category: null }) }]
+      : []),
+    ...filters.brands.map((b) => ({
+      label: b,
+      clear: () => setFilters({ ...filters, brands: filters.brands.filter((x) => x !== b) }),
+    })),
+  ];
+  const activeCount = activeChips.length;
+  const clearAll = () => setFilters({ category: null, brands: [], query: "" });
 
   return (
     <div className="pt-32 pb-24 lg:pt-40 lg:pb-36">
@@ -46,87 +190,153 @@ export default function Shop() {
           </p>
         </Reveal>
 
-        <div className="z-30 -mx-5 mt-14 lg:sticky lg:top-18 border-y border-ink/10 bg-cream/90 px-5 py-4 backdrop-blur-xl sm:-mx-8 sm:px-8 lg:-mx-12 lg:px-12">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none]">
-              <button onClick={() => setCategory(null)} className={chip(category === null)}>
-                Todo
-              </button>
-              {productCategories.map((c) => (
-                <button key={c} onClick={() => setCategory(c)} className={chip(category === c)}>
-                  {c}
+        <div className="mt-14 grid gap-10 lg:grid-cols-12 lg:gap-12">
+          <aside className="hidden lg:col-span-3 lg:block">
+            <div className="sticky top-28">
+              <div className="mb-8 flex items-baseline justify-between">
+                <p className="font-serif text-2xl font-light">Filtrar</p>
+                {activeCount > 0 && (
+                  <button
+                    onClick={clearAll}
+                    className="text-xs text-muted underline underline-offset-4 hover:text-ink"
+                  >
+                    Limpiar
+                  </button>
+                )}
+              </div>
+              <FilterPanel filters={filters} setFilters={setFilters} />
+            </div>
+          </aside>
+
+          <div className="lg:col-span-9">
+            <div className="flex flex-col gap-3 lg:flex-row">
+              <label className="relative flex-1">
+                <span className="sr-only">Buscar productos</span>
+                <Search size={18} className="absolute left-5 top-1/2 -translate-y-1/2 text-muted" />
+                <input
+                  type="search"
+                  value={filters.query}
+                  onChange={(e) => setFilters({ ...filters, query: e.target.value })}
+                  placeholder="Buscar producto, marca o necesidad…"
+                  className="h-14 w-full rounded-full border border-ink/15 bg-cream pl-13 pr-12 text-[0.95rem] outline-none transition-colors placeholder:text-muted/70 hover:border-ink/40 focus:border-ink [&::-webkit-search-cancel-button]:hidden"
+                />
+                {filters.query && (
+                  <button
+                    onClick={() => setFilters({ ...filters, query: "" })}
+                    aria-label="Borrar búsqueda"
+                    className="absolute right-3 top-1/2 grid size-8 -translate-y-1/2 place-items-center rounded-full text-muted hover:bg-sand hover:text-ink"
+                  >
+                    <X size={15} />
+                  </button>
+                )}
+              </label>
+
+              <div className="grid grid-cols-2 gap-3 lg:flex">
+                <button
+                  onClick={() => setSheetOpen(true)}
+                  className="flex h-14 items-center justify-center gap-2 rounded-full border border-ink/15 px-5 text-sm font-medium transition-colors hover:border-ink/40 lg:hidden"
+                >
+                  <SlidersHorizontal size={16} />
+                  Filtros
+                  {activeCount > 0 && (
+                    <span className="grid size-5 place-items-center rounded-full bg-ink text-[0.65rem] text-cream">
+                      {activeCount}
+                    </span>
+                  )}
+                </button>
+                <SortSelect sort={sort} setSort={setSort} />
+              </div>
+            </div>
+
+            <div className="mt-6 flex min-h-8 flex-wrap items-center gap-2">
+              <p className="mr-2 text-sm text-muted">
+                <span className="font-semibold text-ink">{visible.length}</span>{" "}
+                {visible.length === 1 ? "producto" : "productos"}
+              </p>
+              {activeChips.map((c) => (
+                <button
+                  key={c.label}
+                  onClick={c.clear}
+                  className="inline-flex items-center gap-1.5 rounded-full bg-blush/80 py-1.5 pl-3.5 pr-2.5 text-xs font-medium transition-colors hover:bg-blush"
+                >
+                  {c.label}
+                  <X size={12} strokeWidth={2} />
                 </button>
               ))}
+              {activeCount > 1 && (
+                <button
+                  onClick={clearAll}
+                  className="text-xs text-muted underline underline-offset-4 hover:text-ink"
+                >
+                  Limpiar todo
+                </button>
+              )}
             </div>
 
-            <div className="flex flex-wrap items-center gap-3">
-              <label className="relative flex-1 lg:w-56 lg:flex-none">
-                <span className="sr-only">Buscar productos</span>
-                <Search size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted" />
-                <input
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Buscar…"
-                  className="w-full rounded-full border border-ink/15 bg-transparent py-2.5 pl-10 pr-4 text-sm outline-none transition-colors focus:border-ink"
-                />
-              </label>
-              <label className="relative">
-                <span className="sr-only">Marca</span>
-                <select
-                  value={brand}
-                  onChange={(e) => setBrand(e.target.value)}
-                  className="cursor-pointer appearance-none rounded-full border border-ink/15 bg-transparent py-2.5 pl-4 pr-9 text-sm outline-none focus:border-ink"
-                >
-                  <option value="">Todas las marcas</option>
-                  {productBrands.map((b) => (
-                    <option key={b}>{b}</option>
-                  ))}
-                </select>
-                <SlidersHorizontal size={13} className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-muted" />
-              </label>
-              <label>
-                <span className="sr-only">Ordenar</span>
-                <select
-                  value={sort}
-                  onChange={(e) => setSort(e.target.value as Sort)}
-                  className="cursor-pointer rounded-full border border-ink/15 bg-transparent px-4 py-2.5 text-sm outline-none focus:border-ink"
-                >
-                  <option value="featured">Destacados</option>
-                  <option value="price-asc">Precio: menor a mayor</option>
-                  <option value="price-desc">Precio: mayor a menor</option>
-                </select>
-              </label>
-            </div>
+            {visible.length === 0 ? (
+              <div className="rounded-[2rem] bg-sand/50 px-6 py-20 text-center">
+                <p className="font-serif text-3xl font-light">Sin resultados</p>
+                <p className="mt-2 text-muted">Prueba con otra categoría, marca o búsqueda.</p>
+                <button onClick={clearAll} className="btn-outline mt-8">
+                  Limpiar filtros
+                </button>
+              </div>
+            ) : (
+              <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-12 sm:gap-x-6 lg:grid-cols-3">
+                {visible.map((p) => (
+                  <ProductCard key={p.id} product={p} />
+                ))}
+              </div>
+            )}
           </div>
         </div>
-
-        <p className="mt-8 text-sm text-muted">
-          {visible.length} {visible.length === 1 ? "producto" : "productos"}
-        </p>
-
-        {visible.length === 0 ? (
-          <div className="py-24 text-center">
-            <p className="font-serif text-3xl font-light">Sin resultados</p>
-            <p className="mt-2 text-muted">Prueba con otra categoría, marca o búsqueda.</p>
-            <button
-              onClick={() => {
-                setCategory(null);
-                setBrand("");
-                setQuery("");
-              }}
-              className="btn-outline mt-8"
-            >
-              Limpiar filtros
-            </button>
-          </div>
-        ) : (
-          <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-12 sm:gap-x-6 lg:grid-cols-4">
-            {visible.map((p) => (
-              <ProductCard key={p.id} product={p} />
-            ))}
-          </div>
-        )}
       </div>
+
+      <AnimatePresence>
+        {sheetOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSheetOpen(false)}
+            className="fixed inset-0 z-[70] flex items-end bg-ink/40 backdrop-blur-sm lg:hidden"
+          >
+            <motion.div
+              role="dialog"
+              aria-modal="true"
+              aria-label="Filtros"
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              onClick={(e) => e.stopPropagation()}
+              className="flex max-h-[85dvh] w-full flex-col rounded-t-[2rem] bg-cream"
+            >
+              <div className="flex items-center justify-between border-b border-ink/10 px-6 py-5">
+                <p className="font-serif text-2xl font-light">Filtros</p>
+                <button
+                  onClick={() => setSheetOpen(false)}
+                  aria-label="Cerrar filtros"
+                  className="grid size-10 place-items-center rounded-full hover:bg-sand"
+                >
+                  <X size={18} strokeWidth={1.5} />
+                </button>
+              </div>
+              <div className="flex-1 overflow-y-auto px-4 py-6">
+                <FilterPanel filters={filters} setFilters={setFilters} />
+              </div>
+              <div className="flex gap-3 border-t border-ink/10 px-6 py-5">
+                <button onClick={clearAll} className="btn-outline flex-1 px-4">
+                  Limpiar
+                </button>
+                <button onClick={() => setSheetOpen(false)} className="btn-dark flex-[2] px-4">
+                  Ver {visible.length} {visible.length === 1 ? "producto" : "productos"}
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

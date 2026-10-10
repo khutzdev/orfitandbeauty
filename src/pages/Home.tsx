@@ -1,6 +1,7 @@
 import Hero from "../components/Hero";
 import Brands from "../components/Brands";
 import Services from "../components/Services";
+import OnlineConsult from "../components/OnlineConsult";
 import Specialist from "../components/Specialist";
 import Products from "../components/Products";
 import WhyUs from "../components/WhyUs";
@@ -14,6 +15,7 @@ export default function Home() {
       <Hero />
       <Brands />
       <Services />
+      <OnlineConsult />
       <Specialist />
       <Products />
       <WhyUs />

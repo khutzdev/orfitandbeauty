@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router";
 import { ArrowRight, ShoppingBag } from "lucide-react";
-import { bookingLink } from "../data/site";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -13,11 +12,9 @@ const stats = [
 
 function RotatingBadge() {
   return (
-    <a
-      href={bookingLink()}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Agenda tu cita por WhatsApp"
+    <Link
+      to="/agendar"
+      aria-label="Agenda tu cita"
       className="group absolute -left-10 bottom-16 hidden size-32 place-items-center rounded-full bg-cream shadow-[0_20px_50px_-20px_rgba(29,27,24,0.35)] sm:grid"
     >
       <svg viewBox="0 0 100 100" className="absolute inset-0 animate-[spin_18s_linear_infinite]">
@@ -31,7 +28,7 @@ function RotatingBadge() {
       <span className="grid size-11 place-items-center rounded-full bg-ink text-cream transition-colors duration-500 group-hover:bg-rose-deep">
         <ArrowRight size={16} strokeWidth={1.75} className="-rotate-45" />
       </span>
-    </a>
+    </Link>
   );
 }
 
