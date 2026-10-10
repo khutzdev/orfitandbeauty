@@ -1,7 +1,7 @@
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Link } from "react-router";
-import { Minus, Plus, ShoppingBag, Trash2, X } from "lucide-react";
+import { Check, MessageCircle, Minus, Plus, ShoppingBag, Trash2, X } from "lucide-react";
 import { formatPrice } from "../../data/products";
 import { waLink } from "../../data/site";
 import { useCart } from "../../store/cart";
@@ -9,7 +9,14 @@ import { useCart } from "../../store/cart";
 const ease = [0.22, 1, 0.36, 1] as const;
 
 export default function CartDrawer() {
-  const { lines, count, total, isOpen, close, setQty, remove } = useCart();
+  const { lines, count, total, isOpen, close: closeCart, setQty, remove, clear } = useCart();
+  // WhatsApp link of the order just sent; shows the confirmation until the drawer closes.
+  const [sentLink, setSentLink] = useState<string | null>(null);
+
+  const close = useCallback(() => {
+    setSentLink(null);
+    closeCart();
+  }, [closeCart]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -36,6 +43,14 @@ export default function CartDrawer() {
     "",
     "¿Me confirman disponibilidad y forma de entrega?",
   ].join("\n");
+
+  const sendOrder = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const link = waLink(orderMessage);
+    window.open(link, "_blank", "noopener,noreferrer");
+    setSentLink(link);
+    clear();
+  };
 
   return (
     <AnimatePresence>
@@ -72,7 +87,30 @@ export default function CartDrawer() {
               </button>
             </header>
 
-            {lines.length === 0 ? (
+            {sentLink ? (
+              <div className="flex flex-1 flex-col items-center justify-center px-8 text-center">
+                <span className="grid size-16 place-items-center rounded-full bg-ink text-cream">
+                  <Check size={24} strokeWidth={1.5} />
+                </span>
+                <p className="mt-6 font-serif text-2xl font-light">¡Pedido enviado!</p>
+                <p className="mt-2 text-sm leading-relaxed text-muted">
+                  Abrimos WhatsApp con tu pedido. Envía el mensaje y te confirmamos
+                  disponibilidad, pago y entrega.
+                </p>
+                <a
+                  href={sentLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-outline mt-8"
+                >
+                  <MessageCircle size={15} strokeWidth={1.75} />
+                  Abrir WhatsApp de nuevo
+                </a>
+                <Link to="/tienda" onClick={close} className="mt-4 text-sm text-muted underline underline-offset-4 hover:text-ink">
+                  Seguir comprando
+                </Link>
+              </div>
+            ) : lines.length === 0 ? (
               <div className="flex flex-1 flex-col items-center justify-center px-8 text-center">
                 <span className="grid size-16 place-items-center rounded-full bg-sand">
                   <ShoppingBag size={22} strokeWidth={1.5} />
@@ -148,6 +186,7 @@ export default function CartDrawer() {
                   </p>
                   <a
                     href={waLink(orderMessage)}
+                    onClick={sendOrder}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn-dark mt-5 w-full"
