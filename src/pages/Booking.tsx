@@ -44,7 +44,7 @@ const modalities: { id: Modality; title: string; description: string; icon: type
     id: "online",
     title: "Consulta en línea",
     description:
-      "Por videollamada desde donde estés. Para valoración, bariatría y seguimiento de tu protocolo.",
+      "Por videollamada desde donde estés. Para bariatría y el Protocolo VIP Tirzepatide.",
     icon: Video,
   },
 ];

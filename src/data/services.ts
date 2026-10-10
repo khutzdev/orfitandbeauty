@@ -163,11 +163,9 @@ export const serviceCategories: ServiceCategory[] = [
 export const generalConsultation: Service = {
   name: 'Valoración médica general',
   description: 'Analizamos tu historial y tus objetivos para diseñar tu plan personalizado.',
-  online: true,
 };
 
 export const onlineServices = [
-  generalConsultation,
   ...serviceCategories.flatMap((c) => c.services.filter((s) => s.online)),
 ];
 

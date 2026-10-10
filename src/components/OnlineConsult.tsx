@@ -17,7 +17,7 @@ const howItWorks = [
   {
     icon: Video,
     title: "Consulta desde casa",
-    description: "Valoración, plan personalizado y seguimiento sin salir de casa.",
+    description: "Plan personalizado y seguimiento sin salir de casa.",
   },
 ];
 
