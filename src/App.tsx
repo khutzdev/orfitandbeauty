@@ -1,32 +1,21 @@
-import Navbar from "./components/Navbar";
-import Hero from "./components/Hero";
-import About from "./components/About";
-import Procedures from "./components/Procedures";
-import Brands from "./components/Brands";
-import Products from "./components/Products";
-import WhyUs from "./components/WhyUs";
-import Testimonials from "./components/Testimonials";
-import Contact from "./components/Contact";
-import Footer from "./components/Footer";
-import FloatingWhatsApp from "./components/FloatingWhatsApp";
+import { Route, Routes } from "react-router";
+import Layout from "./components/Layout";
+import Home from "./pages/Home";
+import Shop from "./pages/Shop";
+import ProductPage from "./pages/ProductPage";
+import Booking from "./pages/Booking";
 
 function App() {
   return (
-    <>
-      <Navbar />
-      <main>
-        <Hero />
-        <Procedures />
-        <Brands />
-        <About />
-        <Products />
-        <WhyUs />
-        <Testimonials />
-        <Contact />
-      </main>
-      <Footer />
-      <FloatingWhatsApp />
-    </>
+    <Routes>
+      <Route element={<Layout />}>
+        <Route index element={<Home />} />
+        <Route path="tienda" element={<Shop />} />
+        <Route path="tienda/:productId" element={<ProductPage />} />
+        <Route path="agendar" element={<Booking />} />
+        <Route path="*" element={<Home />} />
+      </Route>
+    </Routes>
   );
 }
 

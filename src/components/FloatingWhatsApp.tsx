@@ -1,123 +1,62 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X } from "lucide-react";
-
-const WA_NUMBER = "7411108466";
-const WA_MESSAGE = encodeURIComponent(
-  "¡Hola! Me gustaría agendar una consulta en Orfit.",
-);
+import { bookingLink } from "../data/site";
 
 export default function FloatingWhatsApp() {
-  const [tooltipVisible, setTooltipVisible] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [tooltip, setTooltip] = useState(true);
+
+  useEffect(() => {
+    const onScroll = () => setVisible(window.scrollY > 400);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        bottom: "2rem",
-        right: "2rem",
-        zIndex: 200,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "flex-end",
-        gap: "0.75rem",
-      }}
-    >
-      <AnimatePresence>
-        {tooltipVisible && (
-          <motion.div
-            initial={{ opacity: 0, x: 10, scale: 0.95 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: 10, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-            style={{
-              background: "#1A1A18",
-              color: "#FAFAF7",
-              padding: "0.875rem 1.25rem",
-              fontSize: "0.875rem",
-              lineHeight: 1.5,
-              maxWidth: 220,
-              borderRadius: "12px",
-              boxShadow: "0 8px 24px rgba(26,26,24,0.25)",
-              position: "relative",
-            }}
-          >
-            <button
-              onClick={() => setTooltipVisible(false)}
-              style={{
-                position: "absolute",
-                top: "0.5rem",
-                right: "0.5rem",
-                background: "transparent",
-                border: "none",
-                color: "rgba(250,250,247,0.5)",
-                cursor: "pointer",
-                padding: 0,
-                display: "flex",
-              }}
-            >
-              <X size={14} />
-            </button>
-            <p
-              style={{
-                fontWeight: 600,
-                marginBottom: "0.25rem",
-                paddingRight: "1rem",
-              }}
-            >
-              Chátea con nosotros
-            </p>
-            <p style={{ color: "rgba(250,250,247,0.65)", fontSize: "0.8rem" }}>
-              Solemos responder en pocos minutos.
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <div style={{ position: "relative" }}>
-        {/* Pulse ring */}
+    <AnimatePresence>
+      {visible && (
         <motion.div
-          animate={{ scale: [1, 1.4, 1], opacity: [0.4, 0, 0.4] }}
-          transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
-          style={{
-            position: "absolute",
-            inset: 0,
-            borderRadius: "50%",
-            background: "#25D366",
-            zIndex: -1,
-          }}
-        />
-
-        <a
-          href={`https://wa.me/${WA_NUMBER}?text=${WA_MESSAGE}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          onMouseEnter={() => setTooltipVisible(true)}
-          onMouseLeave={() => setTooltipVisible(false)}
-          style={{
-            width: 56,
-            height: 56,
-            borderRadius: "50%",
-            background: "#25D366",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            boxShadow: "0 4px 20px rgba(37,211,102,0.4)",
-            transition: "transform 0.2s",
-            cursor: "pointer",
-            textDecoration: "none",
-          }}
-          onFocus={(e) =>
-            ((e.currentTarget as HTMLElement).style.transform = "scale(1.1)")
-          }
-          onBlur={(e) =>
-            ((e.currentTarget as HTMLElement).style.transform = "scale(1)")
-          }
-          aria-label="Chatear por WhatsApp"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 20 }}
+          transition={{ duration: 0.4 }}
+          className="fixed bottom-5 right-5 z-40 flex items-end gap-3 sm:bottom-8 sm:right-8"
         >
-          <MessageCircle size={26} color="#fff" fill="#fff" />
-        </a>
-      </div>
-    </div>
+          <AnimatePresence>
+            {tooltip && (
+              <motion.div
+                initial={{ opacity: 0, x: 10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 10 }}
+                transition={{ delay: 0.6, duration: 0.3 }}
+                className="relative mb-1 hidden rounded-2xl bg-cream py-3 pl-4 pr-9 shadow-[0_20px_40px_-20px_rgba(29,27,24,0.45)] sm:block"
+              >
+                <button
+                  onClick={() => setTooltip(false)}
+                  aria-label="Cerrar"
+                  className="absolute right-2.5 top-2.5 text-muted hover:text-ink"
+                >
+                  <X size={13} />
+                </button>
+                <p className="text-sm font-semibold">Chatea con nosotros</p>
+                <p className="text-xs text-muted">Solemos responder en pocos minutos.</p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <a
+            href={bookingLink()}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Chatear por WhatsApp"
+            className="grid size-14 place-items-center rounded-full bg-ink text-cream shadow-[0_20px_40px_-15px_rgba(29,27,24,0.6)] transition-all duration-500 ease-soft hover:scale-105 hover:bg-[#25D366] hover:text-ink"
+          >
+            <MessageCircle size={22} strokeWidth={1.75} />
+          </a>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
