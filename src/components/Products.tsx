@@ -1,61 +1,39 @@
-import { ArrowUpRight } from "lucide-react";
-import { products, waLink, type Product } from "../data/site";
+import { Link } from "react-router";
+import { ArrowRight } from "lucide-react";
+import { products } from "../data/products";
+import ProductCard from "./shop/ProductCard";
 import Reveal from "./Reveal";
 
-function ProductCard({ product, index }: { product: Product; index: number }) {
-  return (
-    <Reveal delay={index * 0.08} className="group flex h-full flex-col">
-      <div className="relative aspect-square overflow-hidden rounded-[1.75rem] bg-sand">
-        <img
-          src={product.image}
-          alt={product.brand}
-          loading="lazy"
-          className="size-full object-cover transition-transform duration-[1.2s] ease-soft group-hover:scale-105"
-        />
-        <span className="absolute left-4 top-4 rounded-full bg-cream/90 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.14em] backdrop-blur">
-          {product.category}
-        </span>
-      </div>
-      <div className="flex flex-1 flex-col pt-6">
-        <h3 className="font-serif text-2xl font-light tracking-tight">{product.brand}</h3>
-        <p className="mt-1 text-[0.72rem] uppercase tracking-[0.14em] text-rose-deep">
-          {product.line}
-        </p>
-        <p className="mt-4 flex-1 text-sm leading-relaxed text-muted">{product.description}</p>
-        <a
-          href={waLink(
-            `¡Hola! Me interesa el producto ${product.brand} (${product.line}). ¿Tienen disponibilidad?`,
-          )}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-6 inline-flex items-center gap-2 self-start border-b border-ink/30 pb-1 text-[0.75rem] font-semibold uppercase tracking-[0.14em] transition-colors hover:border-rose-deep hover:text-rose-deep"
-        >
-          Consultar disponibilidad
-          <ArrowUpRight size={14} strokeWidth={1.75} />
-        </a>
-      </div>
-    </Reveal>
-  );
-}
+const featured = products.filter((p) => p.featured).slice(0, 4);
 
 export default function Products() {
   return (
     <section id="products" className="py-24 lg:py-36">
       <div className="container-x">
-        <Reveal className="mx-auto mb-16 max-w-2xl text-center lg:mb-20">
-          <span className="eyebrow">Venta en consultorio</span>
-          <h2 className="heading mt-6">
-            Productos seleccionados <em className="italic text-rose-deep">por expertos</em>
-          </h2>
-          <p className="mt-6 leading-relaxed text-muted">
-            Complementa tus tratamientos con productos dermatológicos
-            certificados, disponibles directamente en nuestro consultorio.
-          </p>
-        </Reveal>
+        <div className="mb-14 flex flex-col gap-8 lg:mb-20 lg:flex-row lg:items-end lg:justify-between">
+          <Reveal className="max-w-2xl">
+            <span className="eyebrow">Tienda de skincare</span>
+            <h2 className="heading mt-6">
+              Tu rutina, <em className="italic text-rose-deep">recetada por expertos</em>
+            </h2>
+            <p className="mt-6 max-w-lg leading-relaxed text-muted">
+              Complementa tus tratamientos con los productos dermatológicos que
+              usamos en consulta. Pide en línea y recoge en el consultorio.
+            </p>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <Link to="/tienda" className="btn-outline">
+              Ver toda la tienda
+              <ArrowRight size={15} strokeWidth={1.75} />
+            </Link>
+          </Reveal>
+        </div>
 
-        <div className="grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
-          {products.map((p, i) => (
-            <ProductCard key={p.brand} product={p} index={i} />
+        <div className="grid grid-cols-2 gap-x-4 gap-y-12 sm:gap-x-6 lg:grid-cols-4">
+          {featured.map((p, i) => (
+            <Reveal key={p.id} delay={i * 0.08}>
+              <ProductCard product={p} />
+            </Reveal>
           ))}
         </div>
       </div>

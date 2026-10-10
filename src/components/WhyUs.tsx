@@ -1,5 +1,4 @@
-import { stats } from "../data/procedures";
-import { pillars } from "../data/site";
+import { pillars, stats } from "../data/site";
 import Reveal from "./Reveal";
 
 export default function WhyUs() {

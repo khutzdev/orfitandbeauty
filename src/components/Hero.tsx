@@ -1,20 +1,23 @@
 import { motion } from "framer-motion";
-import { ArrowRight, MessageCircle } from "lucide-react";
-import { waLink } from "../data/site";
+import { Link } from "react-router";
+import { ArrowRight, ShoppingBag } from "lucide-react";
+import { bookingLink } from "../data/site";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
 const stats = [
   { value: "10+", label: "Años de experiencia" },
   { value: "2k+", label: "Pacientes" },
-  { value: "98%", label: "Satisfacción" },
+  { value: "25+", label: "Tratamientos" },
 ];
 
 function RotatingBadge() {
   return (
     <a
-      href="#contact"
-      aria-label="Agenda tu consulta"
+      href={bookingLink()}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Agenda tu cita por WhatsApp"
       className="group absolute -left-10 bottom-16 hidden size-32 place-items-center rounded-full bg-cream shadow-[0_20px_50px_-20px_rgba(29,27,24,0.35)] sm:grid"
     >
       <svg viewBox="0 0 100 100" className="absolute inset-0 animate-[spin_18s_linear_infinite]">
@@ -52,7 +55,7 @@ export default function Hero() {
             transition={{ duration: 0.8, ease }}
             className="eyebrow"
           >
-            Medicina Estética · Puebla
+            Medicina Estética · Ometepec
           </motion.span>
 
           <h1 className="mt-8 font-serif text-[clamp(3.2rem,8.5vw,7.5rem)] font-light leading-[0.95] tracking-[-0.035em]">
@@ -76,25 +79,20 @@ export default function Hero() {
             transition={{ duration: 0.9, delay: 0.5, ease }}
           >
             <p className="mt-8 max-w-md text-[1.05rem] leading-relaxed text-muted">
-              Precisión médica con visión artística. Resultados naturales y
-              duraderos adaptados a tus rasgos únicos — porque el mejor trabajo
-              estético jamás se nota.
+              Medicina estética, regenerativa y bariatría en un solo lugar.
+              Diseñamos un plan a tu medida para tu piel, tu figura y tu
+              bienestar — con resultados naturales que se sienten como tú.
             </p>
 
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-              <a href="#procedures" className="btn-dark">
-                Explorar tratamientos
+              <a href="#services" className="btn-dark">
+                Explorar servicios
                 <ArrowRight size={15} strokeWidth={1.75} />
               </a>
-              <a
-                href={waLink()}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-outline"
-              >
-                <MessageCircle size={15} strokeWidth={1.75} />
-                Consulta por WhatsApp
-              </a>
+              <Link to="/tienda" className="btn-outline">
+                <ShoppingBag size={15} strokeWidth={1.75} />
+                Tienda de skincare
+              </Link>
             </div>
 
             <dl className="mt-14 grid max-w-lg grid-cols-3 gap-6 border-t border-ink/10 pt-8">

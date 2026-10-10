@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { testimonials } from "../data/procedures";
+import { testimonials } from "../data/site";
 import Reveal from "./Reveal";
 
 export default function Testimonials() {

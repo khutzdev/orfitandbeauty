@@ -1,8 +1,31 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Menu, X, ArrowUpRight } from "lucide-react";
+import { Link } from "react-router";
+import { Menu, X, ArrowUpRight, ShoppingBag } from "lucide-react";
 import { Logo } from "./Logo";
-import { navLinks } from "../data/site";
+import { bookingLink, navLinks } from "../data/site";
+import { useCart } from "../store/cart";
+
+function CartButton({ onClick }: { onClick?: () => void }) {
+  const { count, open } = useCart();
+  return (
+    <button
+      onClick={() => {
+        onClick?.();
+        open();
+      }}
+      aria-label={`Abrir carrito (${count} productos)`}
+      className="relative grid size-11 place-items-center rounded-full text-ink transition-colors hover:bg-ink/5"
+    >
+      <ShoppingBag size={20} strokeWidth={1.5} />
+      {count > 0 && (
+        <span className="absolute right-0.5 top-0.5 grid min-w-5 place-items-center rounded-full bg-rose-deep px-1 text-[0.62rem] font-bold leading-5 text-cream">
+          {count}
+        </span>
+      )}
+    </button>
+  );
+}
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -32,42 +55,47 @@ export default function Navbar() {
           scrolled ? "h-18" : "h-22"
         }`}
       >
-        <a href="#" className="shrink-0" aria-label="Orfit — inicio">
+        <Link to="/" className="shrink-0" aria-label="Orfit — inicio">
           <Logo
             className={`w-auto transition-all duration-500 ${scrolled ? "h-10" : "h-12"}`}
           />
-        </a>
+        </Link>
 
         <ul className="hidden items-center gap-9 lg:flex">
           {navLinks.map((l) => (
             <li key={l.href}>
-              <a
-                href={l.href}
+              <Link
+                to={l.href}
                 className="group relative text-[0.78rem] font-medium uppercase tracking-[0.14em] text-ink/70 transition-colors hover:text-ink"
               >
                 {l.label}
                 <span className="absolute -bottom-1.5 left-0 h-px w-full origin-left scale-x-0 bg-ink transition-transform duration-500 ease-soft group-hover:scale-x-100" />
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
 
-        <a
-          href="#contact"
-          className="btn-dark hidden px-6 py-3 lg:inline-flex"
-        >
-          Reservar cita
-          <ArrowUpRight size={15} strokeWidth={1.75} />
-        </a>
+        <div className="flex items-center gap-2">
+          <CartButton onClick={() => setMenuOpen(false)} />
+          <a
+            href={bookingLink()}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-dark hidden px-6 py-3 lg:inline-flex"
+          >
+            Reservar cita
+            <ArrowUpRight size={15} strokeWidth={1.75} />
+          </a>
 
-        <button
-          onClick={() => setMenuOpen(!menuOpen)}
-          className="-mr-2 p-2 text-ink lg:hidden"
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="-mr-2 p-2 text-ink lg:hidden"
           aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
           aria-expanded={menuOpen}
         >
-          {menuOpen ? <X size={24} strokeWidth={1.5} /> : <Menu size={24} strokeWidth={1.5} />}
-        </button>
+            {menuOpen ? <X size={24} strokeWidth={1.5} /> : <Menu size={24} strokeWidth={1.5} />}
+          </button>
+        </div>
       </nav>
 
       <AnimatePresence>
@@ -89,19 +117,21 @@ export default function Navbar() {
                     transition={{ delay: 0.1 + i * 0.05, duration: 0.5 }}
                     className="border-b border-ink/10"
                   >
-                    <a
-                      href={l.href}
+                    <Link
+                      to={l.href}
                       onClick={() => setMenuOpen(false)}
                       className="flex items-baseline justify-between py-5 font-serif text-3xl font-light"
                     >
                       {l.label}
                       <span className="font-sans text-xs text-muted">0{i + 1}</span>
-                    </a>
+                    </Link>
                   </motion.li>
                 ))}
               </ul>
               <a
-                href="#contact"
+                href={bookingLink()}
+                target="_blank"
+                rel="noopener noreferrer"
                 onClick={() => setMenuOpen(false)}
                 className="btn-dark w-full"
               >

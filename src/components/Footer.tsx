@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import { Instagram, Facebook, ArrowUp } from "lucide-react";
 import { Logo } from "./Logo";
 import { contact, navLinks, socials } from "../data/site";
@@ -13,12 +14,12 @@ export default function Footer() {
       <div className="container-x pt-20">
         <div className="grid gap-12 border-b border-cream/10 pb-16 md:grid-cols-12">
           <div className="md:col-span-5">
-            <a href="#" aria-label="Orfit — inicio" className="inline-block rounded-2xl bg-cream p-3">
+            <Link to="/" aria-label="Orfit — inicio" className="inline-block rounded-2xl bg-cream p-3">
               <Logo className="h-12 w-auto" />
-            </a>
+            </Link>
             <p className="mt-6 max-w-xs leading-relaxed text-cream/60">
-              Clínica de medicina estética dedicada a resultados naturales y
-              duraderos.
+              Clínica de medicina estética, regenerativa y bariatría dedicada a
+              resultados naturales y duraderos.
             </p>
           </div>
 
@@ -27,9 +28,9 @@ export default function Footer() {
             <ul className="mt-5 space-y-3">
               {navLinks.map((l) => (
                 <li key={l.href}>
-                  <a href={l.href} className="text-cream/75 transition-colors hover:text-blush">
+                  <Link to={l.href} className="text-cream/75 transition-colors hover:text-blush">
                     {l.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>

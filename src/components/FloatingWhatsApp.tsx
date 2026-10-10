@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X } from "lucide-react";
-import { waLink } from "../data/site";
+import { bookingLink } from "../data/site";
 
 export default function FloatingWhatsApp() {
   const [visible, setVisible] = useState(false);
@@ -47,7 +47,7 @@ export default function FloatingWhatsApp() {
           </AnimatePresence>
 
           <a
-            href={waLink()}
+            href={bookingLink()}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Chatear por WhatsApp"

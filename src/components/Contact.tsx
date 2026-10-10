@@ -2,8 +2,8 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { ArrowRight, Check, MessageCircle } from "lucide-react";
-import { procedures } from "../data/procedures";
-import { contact, waLink } from "../data/site";
+import { serviceCategories } from "../data/services";
+import { bookingLink, contact, waLink } from "../data/site";
 import Reveal from "./Reveal";
 
 interface FormData {
@@ -15,7 +15,6 @@ interface FormData {
 }
 
 const info = [
-  { label: "Ubicación", content: contact.address },
   { label: "Teléfono", content: contact.phone, href: contact.phoneHref },
   { label: "Correo", content: contact.email, href: contact.emailHref },
 ];
@@ -48,7 +47,17 @@ export default function Contact() {
     formState: { errors },
   } = useForm<FormData>();
 
-  const onSubmit = () => {
+  // No backend yet: the form composes a WhatsApp message with the patient's details.
+  const onSubmit = (data: FormData) => {
+    const details = [
+      `Nombre: ${data.name}`,
+      `Correo: ${data.email}`,
+      data.phone && `Teléfono: ${data.phone}`,
+      data.treatment && `Tratamiento de interés: ${data.treatment}`,
+      data.message && `Mensaje: ${data.message}`,
+    ].filter(Boolean);
+    const message = ["¡Hola! Me gustaría agendar una consulta en Orfit.", "", ...details].join("\n");
+    window.open(waLink(message), "_blank", "noopener,noreferrer");
     setSubmitted(true);
   };
 
@@ -81,7 +90,11 @@ export default function Contact() {
                   </dt>
                   <dd className="mt-2 whitespace-pre-line font-serif text-xl font-light">
                     {item.href ? (
-                      <a href={item.href} className="transition-colors hover:text-blush">
+                      <a
+                        href={item.href}
+                        {...(item.href.startsWith("http") && { target: "_blank", rel: "noopener noreferrer" })}
+                        className="transition-colors hover:text-blush"
+                      >
                         {item.content}
                       </a>
                     ) : (
@@ -93,7 +106,7 @@ export default function Contact() {
             </dl>
 
             <a
-              href={waLink()}
+              href={bookingLink()}
               target="_blank"
               rel="noopener noreferrer"
               className="btn relative self-start bg-[#25D366] text-ink hover:bg-cream"
@@ -117,8 +130,9 @@ export default function Contact() {
                   </span>
                   <h3 className="mt-8 font-serif text-4xl font-light">Mensaje recibido</h3>
                   <p className="mt-4 max-w-sm leading-relaxed text-muted">
-                    Gracias por contactarnos. Nuestro equipo se comunicará contigo
-                    en menos de 24 horas para confirmar tu consulta.
+                    Abrimos WhatsApp con tus datos para que nos envíes el mensaje.
+                    Nuestro equipo te responderá en menos de 24 horas para
+                    confirmar tu consulta.
                   </p>
                 </motion.div>
               ) : (
@@ -168,8 +182,12 @@ export default function Contact() {
                     <Field label="Tratamiento de interés">
                       <select {...register("treatment")} className="field cursor-pointer">
                         <option value="">Selecciona un tratamiento</option>
-                        {procedures.map((p) => (
-                          <option key={p.id}>{p.name}</option>
+                        {serviceCategories.map((c) => (
+                          <optgroup key={c.id} label={c.name}>
+                            {c.services.map((sv) => (
+                              <option key={sv.name}>{sv.name}</option>
+                            ))}
+                          </optgroup>
                         ))}
                         <option>Aún no lo sé</option>
                       </select>
@@ -186,7 +204,7 @@ export default function Contact() {
                   </Field>
 
                   <button type="submit" className="btn-dark w-full sm:w-auto">
-                    Enviar mensaje
+                    Enviar por WhatsApp
                     <ArrowRight size={15} strokeWidth={1.75} />
                   </button>
                 </motion.form>

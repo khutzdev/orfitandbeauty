@@ -1,19 +1,24 @@
-export const WA_NUMBER = '7411108466';
+// Código de país (52) requerido por wa.me.
+export const WA_NUMBER = '527411108466';
 
 export const waLink = (message = '¡Hola! Me gustaría agendar una consulta en Orfit.') =>
   `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(message)}`;
 
+export const BOOKING_MESSAGE =
+  '¡Hola! Quiero agendar una cita en Orfit. ¿Qué días y horarios tienen disponibles?';
+
+export const bookingLink = () => waLink(BOOKING_MESSAGE);
+
 export const navLinks = [
-  { label: 'Tratamientos', href: '#procedures' },
-  { label: 'Nosotros', href: '#about' },
-  { label: 'Productos', href: '#products' },
-  { label: 'Resultados', href: '#why-us' },
-  { label: 'Contacto', href: '#contact' },
+  { label: 'Servicios', href: '/#services' },
+  { label: 'Especialista', href: '/#specialist' },
+  { label: 'Tienda', href: '/tienda' },
+  { label: 'Preguntas', href: '/#faq' },
+  { label: 'Contacto', href: '/#contact' },
 ];
 
 export const contact = {
-  address: 'Av. de la Paz 123, Col. Centro\nPuebla, México',
-  phone: '+52 222 905 1344',
+  phone: '+52 741 110 8466',
   phoneHref: 'tel:+527411108466',
   email: 'kricodelao@gmail.com',
   emailHref: 'mailto:kricodelao@gmail.com',
@@ -30,49 +35,17 @@ export const socials = [
   },
 ];
 
-export const brands = ['Allergan', 'Galderma', 'Merz', 'Teoxane', 'Hugel', 'IPSEN'];
-
-export interface Product {
-  brand: string;
-  line: string;
-  category: string;
-  description: string;
-  image: string;
-}
-
-export const products: Product[] = [
-  {
-    brand: 'SVR',
-    line: 'Sebiaclear · Biotic · Ampoule',
-    category: 'Dermatología',
-    description:
-      'Fórmulas dermatológicas sin perfume ni parabenos para piel grasa, acnéica y sensible. Desarrolladas con dermatólogos para resultados clínicamente comprobados.',
-    image: 'https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?w=700&q=80',
-  },
-  {
-    brand: 'La Roche-Posay',
-    line: 'Effaclar · Cicaplast · Hyalu B5',
-    category: 'Farmacéutica',
-    description:
-      'Soluciones clínicas con agua termal de La Roche-Posay para pieles sensibles, reactivas e irritadas. Recomendadas por dermatólogos en más de 90 países.',
-    image: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=700&q=80',
-  },
-  {
-    brand: 'Vichy',
-    line: 'Mineral 89 · Liftactiv · Normaderm',
-    category: 'Anti-edad',
-    description:
-      'Fórmulas enriquecidas con agua volcánica de Vichy para hidratación profunda, firmeza visible y control de imperfecciones en todo tipo de piel.',
-    image: 'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=700&q=80',
-  },
-  {
-    brand: 'CeraVe',
-    line: 'Hidratante · Limpiador · SA Suavizante',
-    category: 'Barrera cutánea',
-    description:
-      'Ceramidas esenciales + ácido hialurónico + niacinamida para restaurar y mantener la barrera natural de la piel. Desarrollado con dermatólogos.',
-    image: 'https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=700&q=80',
-  },
+export const brands = [
+  'Merz',
+  'IT Pharma',
+  "L'Cells",
+  'IFA Celtics',
+  'SVR',
+  'Filorga',
+  'PB Serum',
+  'Pro-Oteo',
+  'Mesoestetic',
+  'Fillmed',
 ];
 
 export const pillars = [
@@ -95,5 +68,91 @@ export const pillars = [
     title: 'Resultados Comprobados',
     description:
       'Más de una década de experiencia y miles de pacientes satisfechos reflejan nuestro compromiso con la excelencia y la mejora continua.',
+  },
+];
+
+export const stats = [
+  { value: '10+', label: 'Años de Experiencia' },
+  { value: '2,000+', label: 'Pacientes Satisfechos' },
+  { value: '25+', label: 'Tratamientos Disponibles' },
+  { value: '98%', label: 'Índice de Satisfacción' },
+];
+
+export const testimonials = [
+  {
+    name: 'Sofía M.',
+    text: 'Los resultados fueron increíblemente naturales. Me veo como yo misma — solo más descansada y radiante. El equipo me hizo sentir completamente tranquila durante todo el proceso.',
+    treatment: 'Toxina botulínica + Rellenos',
+  },
+  {
+    name: 'Valentina R.',
+    text: 'Mi piel nunca había lucido tan bien. Después de mis sesiones de Hidrafacial, la textura y el brillo son de otro nivel. Recomiendo ampliamente Orfit a quien esté considerando tratamientos estéticos.',
+    treatment: 'Hidrafacial',
+  },
+  {
+    name: 'Camila T.',
+    text: 'Profesionales, precisos y genuinamente atentos. El relleno de labios fue exactamente lo que quería — un volumen sutil que luce completamente natural. Volveré sin duda.',
+    treatment: 'Fillers / Rellenos',
+  },
+];
+
+export const specialist = {
+  name: 'Dra. Karen Alicia de la O Rico',
+  role: 'Bariatría · Medicina Estética · Auriculoterapia',
+  title: 'Ciencia y calidez al servicio de tu belleza',
+  // Agregar la foto real de la doctora (p. ej. '/dra-karen.jpg' en /public). Vacío = monograma.
+  image: '',
+  bio: [
+    'Soy la Dra. Karen Alicia de la O Rico, médico especialista apasionada por la salud metabólica y la estética avanzada. Mi enfoque no es solo tratar el síntoma, sino acompañarte en una transformación integral que inicie desde el interior.',
+    "Con una sólida formación en Bariatría, Medicina Estética y Auriculoterapia, he diseñado OR'Fit como un espacio donde la ciencia y el cuidado personalizado se encuentran. Mi objetivo es que cada paciente que entre a mi consultorio recupere no solo su figura o la salud de su piel, sino también su seguridad y bienestar general.",
+    'Creo fielmente en los resultados naturales y en tratamientos basados en evidencia médica, utilizando siempre tecnología de vanguardia y los estándares más altos de seguridad.',
+  ],
+  values: [
+    {
+      title: 'Atención Humana',
+      description: 'Escucho tus objetivos y miedos para crear el plan perfecto para ti.',
+    },
+    {
+      title: 'Experiencia Médica',
+      description: 'Cada procedimiento es realizado con precisión profesional.',
+    },
+    {
+      title: 'Actualización Constante',
+      description:
+        'Traigo para ti los protocolos más modernos a nivel mundial, como el innovador Tirzepatide.',
+    },
+  ],
+};
+
+export const faqs = [
+  {
+    question: '¿Cómo sé qué tratamiento es el ideal para mí?',
+    answer:
+      'Lo más importante es la valoración médica inicial. En la primera consulta analizamos tu historial, tus objetivos y tus necesidades específicas para diseñar un plan personalizado que combine nutrición, aparatología o medicina estética según sea el caso.',
+  },
+  {
+    question: '¿Los procedimientos de Medicina Estética (Bótox, Rellenos) duelen?',
+    answer:
+      'Son procedimientos mínimamente invasivos. Utilizamos técnicas de aplicación precisas y, de ser necesario, anestesia tópica (crema) para que la experiencia sea prácticamente indolora y muy cómoda para ti.',
+  },
+  {
+    question: '¿Qué es el Protocolo VIP Tirzepatide y por qué es diferente?',
+    answer:
+      'Es lo más avanzado actualmente en salud metabólica. A diferencia de otros métodos, este protocolo ayuda al cuerpo a procesar las grasas de forma muy eficiente y a controlar el apetito, siempre bajo un estricto seguimiento médico para garantizar tu seguridad y resultados.',
+  },
+  {
+    question: '¿Cuánto tiempo duran los resultados de la aparatología (Cavitación, Radiofrecuencia)?',
+    answer:
+      'Los resultados son visibles desde las primeras sesiones, pero para que sean duraderos es vital seguir las recomendaciones de alimentación e hidratación que te brindamos en el consultorio.',
+  },
+  {
+    question: '¿Hay algún tiempo de recuperación tras los inyectables?',
+    answer:
+      'La mayoría de nuestros tratamientos te permiten reincorporarte a tus actividades diarias de inmediato. En algunos casos, como con los rellenos o lipoenzimas, puede presentarse una ligera inflamación que desaparece en un par de días.',
+  },
+  {
+    question: '¿Qué diferencia hay entre un facial convencional y un Hidrafacial o Peeling Médico?',
+    answer:
+      'Los faciales médicos utilizan activos de grado profesional y tecnología que penetra en capas más profundas de la piel. No solo limpian, sino que tratan problemas específicos como manchas, acné, poros abiertos o líneas de expresión.',
   },
 ];
