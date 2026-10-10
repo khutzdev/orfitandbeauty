@@ -1,13 +1,23 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router";
-import { ArrowRight, ShoppingBag } from "lucide-react";
+import { ArrowRight, ArrowUpRight, HeartPulse, Sparkles } from "lucide-react";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
-const stats = [
-  { value: "10+", label: "Años de experiencia" },
-  { value: "2k+", label: "Pacientes" },
-  { value: "25+", label: "Tratamientos" },
+const specialties = [
+  {
+    category: "medicina-estetica",
+    icon: Sparkles,
+    title: "Medicina Estética",
+    description: "Bótox, rellenos, faciales médicos y medicina regenerativa.",
+  },
+  {
+    category: "consultas",
+    icon: HeartPulse,
+    title: "Bariatría",
+    description: "Control de peso médico y Protocolo VIP Tirzepatide.",
+    badge: "También en línea",
+  },
 ];
 
 function RotatingBadge() {
@@ -52,11 +62,11 @@ export default function Hero() {
             transition={{ duration: 0.8, ease }}
             className="eyebrow"
           >
-            Medicina Estética · Ometepec
+            Medicina Estética y Bariatría
           </motion.span>
 
-          <h1 className="mt-8 font-serif text-[clamp(3.2rem,8.5vw,7.5rem)] font-light leading-[0.95] tracking-[-0.035em]">
-            {["Tu belleza,", "refinada."].map((line, i) => (
+          <h1 className="mt-8 font-serif text-[clamp(2.9rem,7vw,4.6rem)] font-light leading-[1] tracking-[-0.035em]">
+            {["Belleza que se\u00a0nota,", "salud que se\u00a0siente."].map((line, i) => (
               <span key={line} className="block overflow-hidden pb-2">
                 <motion.span
                   initial={{ y: "105%" }}
@@ -76,33 +86,48 @@ export default function Hero() {
             transition={{ duration: 0.9, delay: 0.5, ease }}
           >
             <p className="mt-8 max-w-md text-[1.05rem] leading-relaxed text-muted">
-              Medicina estética, regenerativa y bariatría en un solo lugar.
-              Diseñamos un plan a tu medida para tu piel, tu figura y tu
-              bienestar — con resultados naturales que se sienten como tú.
+              Rejuvenece tu piel, moldea tu figura y alcanza tu peso ideal con
+              un plan médico diseñado para ti por la Dra.&nbsp;Karen De&nbsp;la&nbsp;O.
             </p>
 
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-              <a href="#services" className="btn-dark">
-                Explorar servicios
+              <Link to="/agendar" className="btn-dark">
+                Agenda tu valoración
                 <ArrowRight size={15} strokeWidth={1.75} />
-              </a>
-              <Link to="/tienda" className="btn-outline">
-                <ShoppingBag size={15} strokeWidth={1.75} />
-                Tienda de skincare
               </Link>
+              <a href="#services" className="btn-outline">
+                Ver tratamientos
+              </a>
             </div>
 
-            <dl className="mt-14 grid max-w-lg grid-cols-3 gap-6 border-t border-ink/10 pt-8">
-              {stats.map((s) => (
-                <div key={s.label}>
-                  <dt className="sr-only">{s.label}</dt>
-                  <dd className="font-serif text-3xl font-light sm:text-4xl">{s.value}</dd>
-                  <dd className="mt-1 text-[0.68rem] uppercase tracking-[0.16em] text-muted">
-                    {s.label}
-                  </dd>
-                </div>
+            <div className="mt-10 grid max-w-xl grid-cols-2 gap-3 sm:mt-12">
+              {specialties.map((sp) => (
+                <Link
+                  key={sp.title}
+                  to="/#services"
+                  state={{ serviceCategory: sp.category }}
+                  className="group relative rounded-3xl border border-ink/10 bg-cream/70 p-4 backdrop-blur sm:p-5 transition-all duration-500 ease-soft hover:-translate-y-0.5 hover:border-ink/30 hover:bg-cream"
+                >
+                  <span className="flex items-start justify-between">
+                    <span className="grid size-9 place-items-center rounded-full bg-blush text-rose-deep sm:size-10">
+                      <sp.icon size={18} strokeWidth={1.5} />
+                    </span>
+                    <ArrowUpRight
+                      size={16}
+                      strokeWidth={1.5}
+                      className="text-muted transition-transform duration-500 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-ink"
+                    />
+                  </span>
+                  <span className="mt-3 block font-serif text-lg font-light leading-tight sm:mt-4 sm:text-xl">{sp.title}</span>
+                  <span className="mt-1 block text-xs leading-snug text-muted sm:text-sm">{sp.description}</span>
+                  {sp.badge && (
+                    <span className="mt-3 inline-block rounded-full bg-mint px-2 py-1 text-[0.55rem] sm:px-2.5 sm:text-[0.6rem] font-semibold uppercase tracking-[0.12em] text-forest">
+                      {sp.badge}
+                    </span>
+                  )}
+                </Link>
               ))}
-            </dl>
+            </div>
           </motion.div>
         </div>
 

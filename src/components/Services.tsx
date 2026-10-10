@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, Video } from "lucide-react";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import { generalConsultation, serviceCategories } from "../data/services";
 import { waLink } from "../data/site";
 import Reveal from "./Reveal";
@@ -9,7 +9,15 @@ import Reveal from "./Reveal";
 const ease = [0.22, 1, 0.36, 1] as const;
 
 export default function Services() {
-  const [activeId, setActiveId] = useState(serviceCategories[0].id);
+  const location = useLocation();
+  const requested = (location.state as { serviceCategory?: string } | null)?.serviceCategory;
+  // A tab picked by the user wins until a new navigation (e.g. from the hero) asks for another.
+  const [picked, setPicked] = useState<{ id: string; key: string } | null>(null);
+  const activeId =
+    picked?.key === location.key
+      ? picked.id
+      : (serviceCategories.find((c) => c.id === requested)?.id ?? picked?.id ?? serviceCategories[0].id);
+  const setActiveId = (id: string) => setPicked({ id, key: location.key });
   const active = serviceCategories.find((c) => c.id === activeId)!;
 
   return (
