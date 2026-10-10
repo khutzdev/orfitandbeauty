@@ -133,8 +133,8 @@ export const specialist = {
   role: 'Bariatría · Medicina Estética · Auriculoterapia',
   licenses: ['12171849', '13832250'],
   title: 'Ciencia y calidez al servicio de tu belleza',
-  // Agregar la foto real de la doctora (p. ej. '/dra-karen.jpg' en /public). Vacío = monograma.
-  image: '',
+  // Vacío = se muestra el monograma del logo.
+  image: '/dra-karen.jpg',
   bio: [
     'Soy la Dra. Karen Alicia de la O Rico, médico especialista apasionada por la salud metabólica y la estética avanzada. Mi enfoque no es solo tratar el síntoma, sino acompañarte en una transformación integral que inicie desde el interior.',
     "Con una sólida formación en Bariatría, Medicina Estética y Auriculoterapia, he diseñado OR'Fit como un espacio donde la ciencia y el cuidado personalizado se encuentran. Mi objetivo es que cada paciente que entre a mi consultorio recupere no solo su figura o la salud de su piel, sino también su seguridad y bienestar general.",
